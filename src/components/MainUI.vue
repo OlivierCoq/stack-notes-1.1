@@ -20,8 +20,8 @@
           <note-body v-if="selected_note" :note="selected_note" />
         </v-row>
         <v-row v-if="selected_note" class="pb-0 mb-0">
-          <v-col cols="6" />
-          <v-col cols="6" class="mt-3 mb-0 pb-0">
+          <v-col cols="4" />
+          <v-col cols="8" class="mt-3 mb-0 pb-0">
             <div class="d-flex w-100">
               <v-spacer />
               <v-btn class="secondary-bg gray-4 secondary-font me-2">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+  
   import notesList from './sections/notes-list.vue'
   import noteBody from './sections/note-body.vue'
   export default {

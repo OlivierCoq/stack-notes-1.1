@@ -99,8 +99,8 @@
           this.new_note.error = false
           this.new_note_dialog = false
           this.new_note = {
-            title: '',
-            content: '',
+            title: ``,
+            content: `<span>//write code or notes here! :)</span>`,
             error: false
           }
         }
