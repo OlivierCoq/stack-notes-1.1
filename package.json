@@ -13,7 +13,7 @@
     "postuninstall": "electron-builder install-app-deps",
     "start": "vue-cli-service build && electron ."
   },
-  "main": "background.js",
+  "main": "main.js",
   "dependencies": {
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
