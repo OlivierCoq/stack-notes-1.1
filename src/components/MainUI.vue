@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid id="main-ui">
+  <v-container fluid id="main-ui" class="gray-3-bg">
     <v-row>
       <v-col cols="12" sm="12" md="3">
         <h1 class="main-font">
@@ -8,20 +8,20 @@
           <span class="secondary-color">notes</span>
           <span class="gray-4">();</span>
         </h1>
-        <!-- <v-icon class="fa fa-house"></v-icon> -->
       </v-col>
     </v-row>
     <v-row mt-5>
       <v-col cols="4">
-        <notes-list :notes="notes" />
+        <notes-list @select-note="select_main_note" />
       </v-col>
       <v-col cols="8">
         <v-row>
           <!-- Selected Note -->
+          <note-body v-if="selected_note" :note="selected_note" />
         </v-row>
-        <v-row v-if="selected_note">
+        <v-row v-if="selected_note" class="pb-0 mb-0">
           <v-col cols="6" />
-          <v-col cols="6">
+          <v-col cols="6" class="mt-3 mb-0 pb-0">
             <div class="d-flex w-100">
               <v-spacer />
               <v-btn class="secondary-bg gray-4 secondary-font me-2">
@@ -43,9 +43,11 @@
 
 <script>
   import notesList from './sections/notes-list.vue'
+  import noteBody from './sections/note-body.vue'
   export default {
     components: {
-      notesList
+      notesList,
+      noteBody
     },
     name: 'MainUI',
     data(){
@@ -53,13 +55,17 @@
         notes: [],
         selected_note: false
       }
+    },
+    methods: {
+      select_main_note(note){
+        this.selected_note = note
+      }
     }
   }
 </script>
 
 <style lang="scss">
 #main-ui {
-  background-color: $gray-3;
   height: 100vh;
 }
 </style>

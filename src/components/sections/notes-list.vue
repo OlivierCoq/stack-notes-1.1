@@ -26,7 +26,7 @@
               class="px-3 pt-1 pb-4 shadow-1 gray-2-bg note my-2 me-2"
               dark
               :class="note === selected_note ? 'selected-note' : ''"
-              @click="selected_note = note"
+              @click="select_note(note)"
             >
               <h3 class="gray-4 secondary-font my-3">{{ note.title }}</h3>
             </div>
@@ -76,12 +76,6 @@
 <script>
   export default {
     name: 'NotesList',
-    props: {
-      notes: {
-        type: Array,
-        required: true
-      }
-    },
     data(){
       return {
         search: '',
@@ -111,6 +105,10 @@
           }
         }
         
+      },
+      select_note(note){
+        this.selected_note = note
+        this.$emit('select-note', note)
       }
     }
   }
