@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 import MainUI from './components/MainUI.vue';
 export default {
   name: 'App',
