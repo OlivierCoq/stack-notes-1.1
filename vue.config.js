@@ -4,14 +4,14 @@
 // })
 
 module.exports = {
-  pluginOptions: {
-    css: {
-      loaderOptions: {
-        scss: {
-          additionalData: `@import "@/sass/main.scss";`
-        }
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `@import "@/sass/main.scss";`
       }
-    },
+    }
+  },
+  pluginOptions: {
     electronBuilder: {
       nodeIntegration: true
     },
