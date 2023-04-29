@@ -1,5 +1,5 @@
 <template>
-  <v-container id="note-body" class="gray-3-bg" fluid>
+    <v-container id="note-body" class="gray-3-bg" fluid>
     <v-row>
       <v-col>
         <h2 class="gray-4 primary-font">{{ note.title }}</h2>
@@ -12,23 +12,18 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 export default {
+  name: 'NoteBody',
   props: {
     note: {
       type: Object,
       required: true
     }
   },
-  name: 'NoteBody',
-  data() {
-    return {};
-  },
-  methods: {}
+  setup() {}
 }
 </script>
-
 <style lang="scss">
 #note-body {
   height: 432px;

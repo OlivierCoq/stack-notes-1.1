@@ -40,31 +40,34 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
-  
-  import notesList from './sections/notes-list.vue'
-  import noteBody from './sections/note-body.vue'
-  export default {
-    components: {
-      notesList,
-      noteBody
-    },
-    name: 'MainUI',
-    data(){
-      return {
-        notes: [],
-        selected_note: false
-      }
-    },
-    methods: {
-      select_main_note(note){
-        this.selected_note = note
-      }
+
+import notesList from './sections/notes-list.vue'
+import noteBody from './sections/note-body.vue'
+
+export default {
+  name: 'MainUI',
+  setup() {
+      // Data:
+    const notes = [],
+          selectedNote = null
+
+      // Methods:
+    const select_main_note = (note) => {
+      this.selectedNote = note
+    }
+
+
+    return {
+      // data:
+      notes,
+      selectedNote
+      // computed:
+      // methods:     
     }
   }
+}
 </script>
-
 <style lang="scss">
 #main-ui {
   height: 100vh;

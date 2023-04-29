@@ -72,46 +72,48 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
-  export default {
-    name: 'NotesList',
-    data(){
-      return {
-        search: '',
-        new_note_dialog: false,
-        new_note: {
-          title: '',
-          content: '',
-          error: false
-        },
-        displayed_notes: [],
-        selected_note: null
-      }
-    },
-    methods: {
-      newNote(){
-        
-        if(!this.new_note.title){
-          this.new_note.error = 'Title is required.'
-        } else {
-          this.displayed_notes.push(this.new_note)
-          this.new_note.error = false
-          this.new_note_dialog = false
-          this.new_note = {
-            title: ``,
-            content: `<span>//write code or notes here! :)</span>`,
-            error: false
+export default {
+  name: 'NotesList',
+  props: {
+    notes: {
+      type: Array,
+      required: true
+    }
+  },
+  setup() {
+    // Data:
+    const selected_note = null,
+          search = null,
+          search_notes = null,
+    // Methods:
+          select_note = (note) => {
+            this.selected_note = note
+            this.$emit('select-note', note)
+          },
+          newNote = () => {
+            if(!this.new_note.title){
+              this.new_note.error = 'Title is required.'
+            } else {
+              this.displayed_notes.push(this.new_note)
+              this.new_note.error = false
+              this.new_note_dialog = false
+              this.new_note = {
+                title: ``,
+                content: `<span>//write code or notes here! :)</span>`,
+                error: false
+              }
+            }
           }
-        }
-        
-      },
-      select_note(note){
-        this.selected_note = note
-        this.$emit('select-note', note)
-      }
+    return {
+      selected_note,
+      search,
+      search_notes,
+      select_note,
+      newNote
     }
   }
+}
 </script>
 <style lang="scss" scoped>
 #ctr-notes_list {
