@@ -5,6 +5,13 @@
 
 module.exports = {
   pluginOptions: {
+    css: {
+      loaderOptions: {
+        scss: {
+          additionalData: `@import "@/sass/main.scss";`
+        }
+      }
+    },
     electronBuilder: {
       nodeIntegration: true
     },
