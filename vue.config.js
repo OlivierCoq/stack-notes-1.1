@@ -7,6 +7,9 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true
+    },
+    chainWebpack: {
+      title: 'Stack Notes'
     }
   }
 }

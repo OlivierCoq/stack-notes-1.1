@@ -1,5 +1,6 @@
 {
   "name": "stack-notes-1.1",
+  "productName": "Stack Notes",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,7 +16,9 @@
   "dependencies": {
     "@electron/remote": "^2.0.9",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "sass-loader": "^13.2.2",
+    "vue": "^3.2.13",
+    "vuetify": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
