@@ -1,4 +1,4 @@
-# stack-notes-2.0
+# stack-notes-1.1
 
 An Electron app for CS to bring their programming notes to life.
 
