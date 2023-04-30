@@ -12,7 +12,7 @@
     </v-row>
     <v-row mt-5>
       <v-col cols="4">
-        <notes-list @select-note="select_main_note" :notes="notes" />
+        <notes-list @select-note="select_main_note" :notes="state.notes" />
       </v-col>
       <v-col cols="8">
         <v-row>
@@ -41,7 +41,7 @@
   </v-container>
 </template>
 <script>
-
+import { reactive } from 'vue'
 import notesList from './sections/notes-list.vue'
 import noteBody from './sections/note-body.vue'
 
@@ -49,20 +49,19 @@ export default {
   name: 'MainUI',
   setup() {
       // Data:
-    const notes = [],
-          selected_note = null
-
+    const state = reactive({
+      notes: [],
+      selected_note: null,
+    })
       // Methods:
     const select_main_note = (note) => {
-      this.selected_note = note
+      state.selected_note = note
     }
 
 
     return {
       // data:
-      notes,
-      selected_note,
-      // computed:
+      state,
       // methods: 
       select_main_note    
     }

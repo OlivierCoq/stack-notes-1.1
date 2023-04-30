@@ -66,7 +66,7 @@
   </v-container>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, watch, ref } from 'vue'
 export default {
   name: 'NotesList',
   props: {
@@ -76,7 +76,7 @@ export default {
     }
   },
   emits: ['select-note'],
-  setup(context) {
+  setup(props, context) {
     // Data:
     const state = reactive({
       selected_note: null,
