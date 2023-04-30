@@ -9,7 +9,7 @@
             color="gray-4"
             append-icon="mdi-close"
             :placeholder="state.displayed_notes.length ? 'Find note' : 'Create a note!' "
-            class="search my-0 py-0 secondary-font"
+            class="search_field my-0 py-0 secondary-font"
           /> 
           <!-- loop through notes -->
           <div class="ctr-notes mt-2">
@@ -26,7 +26,7 @@
           </div>
           <v-spacer />
           <v-btn class="green-bg gray-4 secondary-font m-0">
-            <v-icon small class="fa fa-plus"></v-icon> &nbsp; New Note
+            <!-- <v-icon icon="mdi-plus" color="primary"></v-icon> &nbsp; New Note -->
             <v-dialog v-model="state.new_note_dialog" activator="parent" dark>
               <v-card>
                 <v-card-title>New Note</v-card-title>
@@ -49,10 +49,12 @@
                 <v-card-actions>
                   <v-spacer />
                   <v-btn class="gray-2-bg gray-4 secondary-font" @click="state.new_note_dialog = false">
-                    <v-icon small class="fa fa-times"></v-icon> &nbsp; Cancel
+                    <!-- <v-icon small icon="mdi-alpha-x-circle-outline"></v-icon> &nbsp;  -->
+                    Cancel
                   </v-btn>
                   <v-btn class="green-bg gray-4 secondary-font" @click="newNote()">
-                    <v-icon small class="fa fa-check"></v-icon> &nbsp; Create
+                    <!-- <v-icon small icon="mdi-plus"></v-icon> &nbsp;  -->
+                    Create
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -123,12 +125,18 @@ export default {
 #ctr-notes_list {
   height: 480px;
 
-  .search {
+  .search_field {
     border-radius: 5px; 
     max-height: 40px;
 
     .v-input__slot {
       padding: 0 10px;}
+  }
+
+  .search_field input::placeholder,
+  .search_field input {
+    color: white !important;
+    opacity: 1;
   }
 
   .ctr-notes {

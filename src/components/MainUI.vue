@@ -25,13 +25,16 @@
             <div class="d-flex w-100">
               <v-spacer />
               <v-btn class="secondary-bg gray-4 secondary-font me-2">
-                <v-icon small class="fa fa-code"></v-icon> &nbsp; Code
+                <!-- <v-icon small icon="mdi-code-braces" color="grey-lighten-5"></v-icon> &nbsp;  -->
+                Code
               </v-btn>
               <v-btn class="primary-bg gray-4 secondary-font me-2">
-                <v-icon small class="fa fa-trash"></v-icon> &nbsp; Delete
+                <!-- <v-icon small icon="mdi-trash-can" color="grey-lighten-5"></v-icon> &nbsp;  -->
+                Delete
               </v-btn>
               <v-btn class="gray-2-bg gray-4 secondary-font me-2">
-                <v-icon small class="fa fa-check"></v-icon> &nbsp; Save
+                <!-- <v-icon small icon="mdi-vuetify" color="grey-lighten-5"></v-icon> &nbsp;  -->
+                Save
               </v-btn>
             </div>
           </v-col>

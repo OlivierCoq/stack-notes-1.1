@@ -7,7 +7,4 @@ import * as directives from 'vuetify/lib/directives'
 export default createVuetify({
   components,
   directives,
-  icons: {
-    iconfont: 'fa',
-  }
 })
