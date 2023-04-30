@@ -9,6 +9,7 @@
 <script>
 import fs from 'fs'
 import pathModule from 'path'
+import 'core-js';
 
 import { app } from '@electron/remote'
 import { computed, ref } from 'vue'

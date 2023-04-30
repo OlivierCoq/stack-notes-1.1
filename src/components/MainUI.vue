@@ -12,7 +12,7 @@
     </v-row>
     <v-row mt-5>
       <v-col cols="4">
-        <notes-list @select-note="select_main_note" />
+        <notes-list @select-note="select_main_note" :notes="notes" />
       </v-col>
       <v-col cols="8">
         <v-row>
@@ -50,21 +50,26 @@ export default {
   setup() {
       // Data:
     const notes = [],
-          selectedNote = null
+          selected_note = null
 
       // Methods:
     const select_main_note = (note) => {
-      this.selectedNote = note
+      this.selected_note = note
     }
 
 
     return {
       // data:
       notes,
-      selectedNote
+      selected_note,
       // computed:
-      // methods:     
+      // methods: 
+      select_main_note    
     }
+  },
+  components: {
+    notesList,
+    noteBody
   }
 }
 </script>

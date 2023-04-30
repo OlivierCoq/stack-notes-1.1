@@ -4,75 +4,69 @@
       <v-col class="h-inherit">
         <div class="d-flex flex-column h-100">
           <v-text-field 
-            v-model="search" 
-            append-icon="fa fa-search" 
-            single-line 
-            hide-details 
+            v-model="state.search" 
             background-color="gray-2-bg"
             color="gray-4"
-            dark
-            small
-            solo
-            dense
-            flat
-            :placeholder="displayed_notes.length ? 'Find note' : 'Create a note!' "
+            :placeholder="state.displayed_notes.length ? 'Find note' : 'Create a note!' "
             class="search my-0 py-0 secondary-font"
           /> 
           <!-- loop through notes -->
           <div class="ctr-notes mt-2">
             <div
-              v-for="note in displayed_notes" 
+              v-for="note in state.displayed_notes" 
               :key="note.id" 
               class="px-3 pt-1 pb-4 shadow-1 gray-2-bg note my-2 me-2"
               dark
-              :class="note === selected_note ? 'selected-note' : ''"
+              :class="note === state.selected_note ? 'selected-note' : ''"
               @click="select_note(note)"
             >
               <h3 class="gray-4 secondary-font my-3">{{ note.title }}</h3>
             </div>
           </div>
           <v-spacer />
-          <v-btn class="green-bg gray-4 secondary-font m-0" @click="new_note_dialog = true">
+          <v-btn class="green-bg gray-4 secondary-font m-0">
             <v-icon small class="fa fa-plus"></v-icon> &nbsp; New Note
+            <v-dialog v-model="state.new_note_dialog" activator="parent" dark>
+              <v-card>
+                <v-card-title>New Note</v-card-title>
+                <v-card-text>
+                  <v-form>
+                    <v-text-field 
+                      v-model="state.new_note.title" 
+                      label="Title" 
+                      color="gray-4"
+                      dark
+                      small
+                      dense
+                      flat
+                      class="secondary-font"
+                      @keydown.enter.prevent="newNote()"
+                    />
+                  </v-form>
+                  <p v-show="state.new_note.error" class="primary-color m-0 p-0">{{ state.new_note.error }}</p>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn class="gray-2-bg gray-4 secondary-font" @click="state.new_note_dialog = false">
+                    <v-icon small class="fa fa-times"></v-icon> &nbsp; Cancel
+                  </v-btn>
+                  <v-btn class="green-bg gray-4 secondary-font" @click="newNote()">
+                    <v-icon small class="fa fa-check"></v-icon> &nbsp; Create
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-btn>
         </div>
       </v-col>
     </v-row>
     <v-row>
-      <v-dialog v-model="new_note_dialog" width="500" dark>
-        <v-card>
-          <v-card-title>New Note</v-card-title>
-          <v-card-text>
-            <v-form>
-              <v-text-field 
-                v-model="new_note.title" 
-                label="Title" 
-                color="gray-4"
-                dark
-                small
-                dense
-                flat
-                class="secondary-font"
-                @keydown.enter.prevent="newNote()"
-               />
-            </v-form>
-            <p v-show="new_note.error" class="primary-color m-0 p-0">{{ new_note.error }}</p>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn class="gray-2-bg gray-4 secondary-font" @click="new_note_dialog = false">
-              <v-icon small class="fa fa-times"></v-icon> &nbsp; Cancel
-            </v-btn>
-            <v-btn class="green-bg gray-4 secondary-font" @click="newNote()">
-              <v-icon small class="fa fa-check"></v-icon> &nbsp; Create
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+
     </v-row>
   </v-container>
 </template>
 <script>
+import { reactive } from 'vue'
 export default {
   name: 'NotesList',
   props: {
@@ -81,36 +75,46 @@ export default {
       required: true
     }
   },
-  setup() {
+  emits: ['select-note'],
+  setup(context) {
     // Data:
-    const selected_note = null,
-          search = null,
-          search_notes = null,
-    // Methods:
-          select_note = (note) => {
-            this.selected_note = note
-            this.$emit('select-note', note)
+    const state = reactive({
+      selected_note: null,
+      search: '',
+      search_notes: null,
+      displayed_notes: [],
+      new_note_dialog: false,
+      new_note: {
+        title: ``,
+        content: `<span>//write code or notes here! :)</span>`,
+        error: false
+      }
+    })
+    const select_note = (note) => {
+            state.selected_note = note
+            context.emit('select-note', note)
           },
           newNote = () => {
-            if(!this.new_note.title){
-              this.new_note.error = 'Title is required.'
+            if(!state.new_note.title.length){
+              state.new_note.error = 'Title is required.'
             } else {
-              this.displayed_notes.push(this.new_note)
-              this.new_note.error = false
-              this.new_note_dialog = false
-              this.new_note = {
+              console.log('kill myself')
+              state.displayed_notes.push(state.new_note)
+              state.new_note.error = false
+              state.new_note_dialog = false
+              state.new_note = {
                 title: ``,
                 content: `<span>//write code or notes here! :)</span>`,
                 error: false
               }
             }
           }
+    
     return {
-      selected_note,
-      search,
-      search_notes,
+      state,
+      // Methods:
       select_note,
-      newNote
+      newNote,
     }
   }
 }
@@ -120,7 +124,7 @@ export default {
   height: 480px;
 
   .search {
-    border-radius: 5px;
+    border-radius: 5px; 
     max-height: 40px;
 
     .v-input__slot {
@@ -151,5 +155,8 @@ export default {
   &:hover {
     background-color: darken($green, 3%) !important;
   }
+}
+::placeholder {
+  color: white !important;
 }
 </style>
