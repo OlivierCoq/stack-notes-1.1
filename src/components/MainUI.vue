@@ -17,9 +17,9 @@
       <v-col cols="8">
         <v-row>
           <!-- Selected Note -->
-          <note-body v-if="selected_note" :note="selected_note" />
+          <note-body v-if="state.selected_note" :note="state.selected_note" />
         </v-row>
-        <v-row v-if="selected_note" class="pb-0 mb-0">
+        <v-row v-if="state.selected_note" class="pb-0 mb-0">
           <v-col cols="4" />
           <v-col cols="8" class="mt-3 mb-0 pb-0">
             <div class="d-flex w-100">
@@ -51,7 +51,7 @@ export default {
       // Data:
     const state = reactive({
       notes: [],
-      selected_note: null,
+      selected_note: false,
     })
       // Methods:
     const select_main_note = (note) => {

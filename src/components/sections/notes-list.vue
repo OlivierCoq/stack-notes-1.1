@@ -7,6 +7,7 @@
             v-model="state.search" 
             background-color="gray-2-bg"
             color="gray-4"
+            append-icon="mdi-close"
             :placeholder="state.displayed_notes.length ? 'Find note' : 'Create a note!' "
             class="search my-0 py-0 secondary-font"
           /> 
@@ -98,7 +99,6 @@ export default {
             if(!state.new_note.title.length){
               state.new_note.error = 'Title is required.'
             } else {
-              console.log('kill myself')
               state.displayed_notes.push(state.new_note)
               state.new_note.error = false
               state.new_note_dialog = false
