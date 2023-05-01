@@ -26,7 +26,7 @@
           </div>
           <v-spacer />
           <v-btn class="green-bg gray-4 secondary-font m-0">
-            <!-- <v-icon icon="mdi-plus" color="primary"></v-icon> &nbsp; New Note -->
+            <!-- <v-icon icon="mdi-plus" color="primary"></v-icon> &nbsp; --> New Note 
             <v-dialog v-model="state.new_note_dialog" activator="parent" dark>
               <v-card>
                 <v-card-title>New Note</v-card-title>
@@ -70,6 +70,11 @@
 </template>
 <script>
 import { reactive, watch, ref } from 'vue'
+import fs from 'fs'
+import pathModule from 'path'
+import { app } from '@electron/remote'
+import 'core-js';
+
 export default {
   name: 'NotesList',
   props: {
@@ -81,6 +86,7 @@ export default {
   emits: ['select-note'],
   setup(props, context) {
     // Data:
+    const path = ref(app.getAppPath())
     const state = reactive({
       selected_note: null,
       search: '',
@@ -90,6 +96,7 @@ export default {
       new_note: {
         title: ``,
         content: `<span>//write code or notes here! :)</span>`,
+        date: new Date().getTime(),
         error: false
       }
     })
@@ -102,12 +109,23 @@ export default {
               state.new_note.error = 'Title is required.'
             } else {
               state.displayed_notes.push(state.new_note)
-              state.new_note.error = false
-              state.new_note_dialog = false
-              state.new_note = {
-                title: ``,
-                content: `<span>//write code or notes here! :)</span>`,
-                error: false
+              
+              
+              // Save to file:
+              try {
+                
+                fs.writeFileSync(`${path._rawValue}/local/${state.new_note.title}.json`, JSON.stringify(state.new_note))
+
+                state.new_note.error = false
+                state.new_note_dialog = false
+                state.new_note = {
+                  title: ``,
+                  content: `<span>//write code or notes here! :)</span>`,
+                  date: new Date().getTime(),
+                  error: false
+                }
+              } catch (err) {
+                console.error(err)
               }
             }
           }

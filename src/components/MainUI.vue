@@ -50,6 +50,16 @@ import noteBody from './sections/note-body.vue'
 
 export default {
   name: 'MainUI',
+  props: {
+    files: {
+      type: Array,
+      required: false
+    },
+    filtered: {
+      type: Array,
+      required: false
+    }
+  },
   setup() {
       // Data:
     const state = reactive({

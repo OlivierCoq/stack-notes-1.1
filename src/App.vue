@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <MainUI/>
+      <MainUI :files="files" :filtered="filteredFiles"/>
     </v-main>
   </v-app>
 </template>
