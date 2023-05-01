@@ -8,9 +8,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <div class="gray-1-bg body shadow-1">
-              
-            </div>
+              <div contenteditable v-html="note.data.content" class="gray-1-bg gray-4 body shadow-1" @blur="edit"></div>
           </v-col>
         </v-row>
       </v-container>
@@ -18,6 +16,7 @@
     <action-bar :note="note" />
 </template>
 <script>
+import { reactive, onBeforeMount, watchEffect, ref } from 'vue'
 import actionBar from './action-bar.vue'
 export default {
   name: 'NoteBody',
@@ -27,7 +26,14 @@ export default {
       required: true
     }
   },
-  setup() {},
+  setup(props) {
+    const edit = (e) => {
+            props.note.data.content = e.target.innerText
+          }
+    return {
+      edit
+    }
+  },
   components: {
     actionBar
   }
@@ -45,4 +51,5 @@ export default {
     overflow-y: scroll;
   }
 }
+.h-inherit { height: inherit !important; }
 </style>
