@@ -8,7 +8,9 @@
         </v-row>
         <v-row>
           <v-col>
-            <div class="gray-1-bg body shadow-1" v-html="note.body"></div>
+            <div class="gray-1-bg body shadow-1">
+              
+            </div>
           </v-col>
         </v-row>
       </v-container>

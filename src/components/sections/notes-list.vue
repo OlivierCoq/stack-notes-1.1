@@ -22,7 +22,7 @@
               @click="select_note(note)"
             >
               <h3 class="gray-4 secondary-font mt-3 mb-0">{{ note.title }}</h3>
-              <p class="gray-4 secondary-font m-0">{{ note.preview }}</p>
+              <div class="gray-4 secondary-font m-0" v-html="note.preview"></div>
             </div>
           </div>
           <v-spacer />
