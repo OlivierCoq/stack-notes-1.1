@@ -7,16 +7,15 @@
             v-model="state.search" 
             background-color="gray-2-bg"
             color="gray-4"
-            append-icon="mdi-close"
-            :placeholder="state.displayed_notes.length ? 'Find note' : 'Create a note!' "
-            class="search_field my-0 py-0 secondary-font"
+            :placeholder="state.displayed_notes.length ? 'Find a note' : 'Create a note!' "
+            class="search_field mt-0 mb-5 py-0 secondary-font gray-4"
           /> 
           <!-- loop through notes -->
           <div class="ctr-notes mt-2">
             <div
               v-for="note in state.displayed_notes" 
               :key="note.id" 
-              class="px-3 pt-1 pb-4 shadow-1 gray-2-bg note my-2 me-2"
+              class="px-3 pt-1 pb-4 shadow-1 gray-2-bg note my-3 me-2"
               dark
               :class="note === state.selected_note ? 'selected-note' : ''"
               @click="select_note(note)"

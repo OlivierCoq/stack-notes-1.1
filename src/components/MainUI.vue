@@ -1,14 +1,7 @@
 <template>
   <v-container fluid id="main-ui" class="gray-3-bg">
     <v-row>
-      <v-col cols="12" sm="12" md="3">
-        <h1 class="main-font">
-          <span class="primary-color">stack</span>
-          <span class="gray-4">.</span>
-          <span class="secondary-color">notes</span>
-          <span class="gray-4">();</span>
-        </h1>
-      </v-col>
+      <logo />
     </v-row>
     <v-row mt-5>
       <v-col cols="4">
@@ -23,6 +16,7 @@
 </template>
 <script>
 import { reactive, computed, ref } from 'vue'
+import logo from './sections/header-bar/logo.vue'
 import notesList from './sections/notes-list.vue'
 import noteBody from './sections/note-body.vue'
 import actionBar from './sections/action-bar.vue'
@@ -38,11 +32,17 @@ export default {
   },
   setup() {
       // Data:
-    const path = ref(app.getAppPath())
-    const state = reactive({
-      selected_note: false,
-      local_path: `${path._rawValue}/local`
-    })
+    const path = ref(app.getAppPath()),
+          state = reactive({
+            selected_note: false,
+            local_path: `${path._rawValue}/local`
+          }),
+          formatSize = (size) => {
+            let i = Math.floor(Math.log(size) / Math.log(1024))
+            return (
+              `${ (size / Math.pow(1024, i)).toFixed(2) * 1 } ${ ['B', 'kB', 'MB', 'GB', 'TB'][i] }`
+            )
+          } 
     
 
     const notes = computed(() => {
@@ -57,7 +57,14 @@ export default {
             data: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')),
             preview: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')).content?.substring(0, 45) + ' ...',
             created_at: stats.birthtime.toDateString(),
+            size: formatSize(stats.size),
           }
+        })
+        .sort((a, b) => {
+          if(a.directory === b.directory) {
+            return a.name.localeCompare(b.name)
+          }
+          return a.directory ? -1 : 1
         })
     })
     
@@ -77,6 +84,7 @@ export default {
     }
   },
   components: {
+    logo,
     notesList,
     noteBody,
     actionBar
