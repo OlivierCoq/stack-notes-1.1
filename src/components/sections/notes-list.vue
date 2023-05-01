@@ -130,10 +130,13 @@ export default {
                 console.error(err)
               }
             }
+          },
+          setup_notes = () => {
+            state.displayed_notes = props.notes
           }
     
     onBeforeMount(() => {
-      state.displayed_notes = props.notes
+      setup_notes();
     })
 
     return {

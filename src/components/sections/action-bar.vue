@@ -30,6 +30,7 @@ export default {
       required: true
     }
   },
-  setup() {}
+  setup(props, context) { },
+  emits: []
 }
 </script>
