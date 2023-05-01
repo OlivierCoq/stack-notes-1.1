@@ -1,18 +1,22 @@
 <template>
-    <v-container id="note-body" class="gray-3-bg" fluid>
     <v-row>
-      <v-col>
-        <h2 class="gray-4 primary-font">{{ note.title }}</h2>
-      </v-col>
+      <v-container id="note-body" class="gray-3-bg" fluid>
+        <v-row>
+          <v-col>
+            <h2 class="gray-4 primary-font">{{ note.title }}</h2>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <div class="gray-1-bg body shadow-1" v-html="note.body"></div>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-row>
-    <v-row>
-      <v-col>
-        <div class="gray-1-bg body shadow-1" v-html="note.body"></div>
-      </v-col>
-    </v-row>
-  </v-container>
+    <action-bar :note="note" />
 </template>
 <script>
+import actionBar from './action-bar.vue'
 export default {
   name: 'NoteBody',
   props: {
@@ -21,7 +25,10 @@ export default {
       required: true
     }
   },
-  setup() {}
+  setup() {},
+  components: {
+    actionBar
+  }
 }
 </script>
 <style lang="scss">

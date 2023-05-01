@@ -21,7 +21,8 @@
               :class="note === state.selected_note ? 'selected-note' : ''"
               @click="select_note(note)"
             >
-              <h3 class="gray-4 secondary-font my-3">{{ note.title }}</h3>
+              <h3 class="gray-4 secondary-font mt-3 mb-0">{{ note.title }}</h3>
+              <p class="gray-4 secondary-font m-0">{{ note.preview }}</p>
             </div>
           </div>
           <v-spacer />
@@ -95,7 +96,7 @@ export default {
       new_note_dialog: false,
       new_note: {
         title: ``,
-        content: `<span>//write code or notes here! :)</span>`,
+        content: `//write code or notes here! :)`,
         date: new Date().getTime(),
         error: false
       },
@@ -121,7 +122,7 @@ export default {
                 state.new_note_dialog = false
                 state.new_note = {
                   title: ``,
-                  content: `<span>//write code or notes here! :)</span>`,
+                  content: `//write code or notes here! :)`,
                   date: new Date().getTime(),
                   error: false
                 }

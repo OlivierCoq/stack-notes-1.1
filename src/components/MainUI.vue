@@ -15,30 +15,8 @@
         <notes-list @select-note="select_main_note" :notes="notes" />
       </v-col>
       <v-col cols="8">
-        <v-row>
           <!-- Selected Note -->
-          <note-body v-if="state.selected_note" :note="state.selected_note" />
-        </v-row>
-        <v-row v-if="state.selected_note" class="pb-0 mb-0">
-          <v-col cols="4" />
-          <v-col cols="8" class="mt-3 mb-0 pb-0">
-            <div class="d-flex w-100">
-              <v-spacer />
-              <v-btn class="secondary-bg gray-4 secondary-font me-2">
-                <!-- <v-icon small icon="mdi-code-braces" color="grey-lighten-5"></v-icon> &nbsp;  -->
-                Code
-              </v-btn>
-              <v-btn class="primary-bg gray-4 secondary-font me-2">
-                <!-- <v-icon small icon="mdi-trash-can" color="grey-lighten-5"></v-icon> &nbsp;  -->
-                Delete
-              </v-btn>
-              <v-btn class="gray-2-bg gray-4 secondary-font me-2">
-                <!-- <v-icon small icon="mdi-vuetify" color="grey-lighten-5"></v-icon> &nbsp;  -->
-                Save
-              </v-btn>
-            </div>
-          </v-col>
-        </v-row>
+        <note-body v-if="state.selected_note" :note="state.selected_note" />
       </v-col>
     </v-row>
   </v-container>
@@ -47,6 +25,7 @@
 import { reactive, computed, ref } from 'vue'
 import notesList from './sections/notes-list.vue'
 import noteBody from './sections/note-body.vue'
+import actionBar from './sections/action-bar.vue'
 
 import fs from 'fs'
 import pathModule from 'path'
@@ -71,10 +50,13 @@ export default {
       return fileNames
         .map(file => {
           const stats = fs.statSync(pathModule.join(state.local_path, file))
-          console.log('holup', stats)
+          // console.log('holup', stats)
           return {
             name: file,
             title: file.split('.')[0],
+            data: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')),
+            preview: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')).content?.substring(0, 45) + ' ...',
+            created_at: stats.birthtime.toDateString(),
           }
         })
     })
@@ -96,7 +78,8 @@ export default {
   },
   components: {
     notesList,
-    noteBody
+    noteBody,
+    actionBar
   }
 }
 </script>
