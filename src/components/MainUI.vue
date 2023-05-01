@@ -12,7 +12,7 @@
     </v-row>
     <v-row mt-5>
       <v-col cols="4">
-        <notes-list @select-note="select_main_note" :notes="state.notes" />
+        <notes-list @select-note="select_main_note" :notes="notes" />
       </v-col>
       <v-col cols="8">
         <v-row>
@@ -44,28 +44,41 @@
   </v-container>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, computed, ref } from 'vue'
 import notesList from './sections/notes-list.vue'
 import noteBody from './sections/note-body.vue'
+
+import fs from 'fs'
+import pathModule from 'path'
+import { app } from '@electron/remote'
+import 'core-js';
 
 export default {
   name: 'MainUI',
   props: {
-    files: {
-      type: Array,
-      required: false
-    },
-    filtered: {
-      type: Array,
-      required: false
-    }
   },
   setup() {
       // Data:
+    const path = ref(app.getAppPath())
     const state = reactive({
-      notes: [],
       selected_note: false,
+      local_path: `${path._rawValue}/local`
     })
+    
+
+    const notes = computed(() => {
+      const fileNames = fs.readdirSync(state.local_path)
+      return fileNames
+        .map(file => {
+          const stats = fs.statSync(pathModule.join(state.local_path, file))
+          console.log('holup', stats)
+          return {
+            name: file,
+            title: file.split('.')[0],
+          }
+        })
+    })
+    
       // Methods:
     const select_main_note = (note) => {
       state.selected_note = note
@@ -75,6 +88,8 @@ export default {
     return {
       // data:
       state,
+      // computed:
+      notes,
       // methods: 
       select_main_note    
     }

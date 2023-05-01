@@ -69,7 +69,7 @@
   </v-container>
 </template>
 <script>
-import { reactive, watch, ref } from 'vue'
+import { reactive, watch, ref, computed, onBeforeMount } from 'vue'
 import fs from 'fs'
 import pathModule from 'path'
 import { app } from '@electron/remote'
@@ -98,7 +98,8 @@ export default {
         content: `<span>//write code or notes here! :)</span>`,
         date: new Date().getTime(),
         error: false
-      }
+      },
+      local_path: `${path._rawValue}/local`
     })
     const select_note = (note) => {
             state.selected_note = note
@@ -130,6 +131,10 @@ export default {
             }
           }
     
+    onBeforeMount(() => {
+      state.displayed_notes = props.notes
+    })
+
     return {
       state,
       // Methods:
