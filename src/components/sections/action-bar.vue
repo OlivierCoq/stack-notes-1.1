@@ -12,7 +12,7 @@
           <!-- <v-icon small icon="mdi-trash-can" color="grey-lighten-5"></v-icon> &nbsp;  -->
           Delete
         </v-btn>
-        <v-btn class="gray-2-bg gray-4 secondary-font me-2">
+            <v-btn class="gray-2-bg gray-4 secondary-font me-2" @click="saveNote">
           <!-- <v-icon small icon="mdi-vuetify" color="grey-lighten-5"></v-icon> &nbsp;  -->
           Save
         </v-btn>
@@ -30,7 +30,19 @@ export default {
       required: true
     }
   },
-  setup(props, context) { },
-  emits: []
+  setup(props, context) {
+
+    // Methods:
+    const saveNote = () => {
+      context.emit('saveNote', props.note)
+      console.log('saving note')
+    }
+
+    return {
+      // Methods:
+      saveNote
+    }
+  },
+  emits: ['saveNote']
 }
 </script>

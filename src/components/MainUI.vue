@@ -9,13 +9,13 @@
       </v-col>
       <v-col cols="8">
           <!-- Selected Note -->
-        <note-body v-if="state.selected_note" :note="state.selected_note" @edit-note="handleNoteEdit" />
+                  <note-body v-if="state.selected_note" :note="state.selected_note" @edit-note="handleNoteEdit" @deleteNote="updateNotesList" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-import { reactive, computed, ref } from 'vue'
+import { reactive, computed, ref, watch } from 'vue'
 import logo from './sections/header-bar/logo.vue'
 import notesList from './sections/notes-list.vue'
 import noteBody from './sections/note-body.vue'
@@ -30,20 +30,20 @@ export default {
   name: 'MainUI',
   props: {
   },
-  setup() {
-      // Data:
+  setup(props, context) {
+    // Data:
     const path = ref(app.getAppPath()),
-          state = reactive({
-            selected_note: false,
-            local_path: `${path._rawValue}/local`
-          }),
-          formatSize = (size) => {
-            let i = Math.floor(Math.log(size) / Math.log(1024))
-            return (
-              `${ (size / Math.pow(1024, i)).toFixed(2) * 1 } ${ ['B', 'kB', 'MB', 'GB', 'TB'][i] }`
-            )
-          } 
-    
+      state = reactive({
+        selected_note: false,
+        local_path: `${path._rawValue}/local`
+      }),
+      formatSize = (size) => {
+        let i = Math.floor(Math.log(size) / Math.log(1024))
+        return (
+          `${(size / Math.pow(1024, i)).toFixed(2) * 1} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`
+        )
+      }
+
 
     const notes = computed(() => {
       const fileNames = fs.readdirSync(state.local_path)
@@ -55,29 +55,30 @@ export default {
             name: file,
             title: file.split('.')[0],
             data: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')),
-            preview: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')).content?.substring(0, 45) + ' ...',
+            // preview: JSON.parse(fs.readFileSync(pathModule.join(state.local_path, file), 'utf8')).content?.substring(0, 45) + ' ...',
             created_at: stats.birthtime.toDateString(),
             size: formatSize(stats.size),
           }
         })
         .sort((a, b) => {
-          if(a.directory === b.directory) {
+          if (a.directory === b.directory) {
             return a.name.localeCompare(b.name)
           }
           return a.directory ? -1 : 1
         })
     })
-    
-      // Methods:
+
+    // Methods:
     const select_main_note = (note) => {
       state.selected_note = note
-    }
-
-  const handleNoteEdit = (noteContent) => {
-    state.selected_note.data.content = noteContent
-  }
-    
-
+    },
+      handleNoteEdit = (noteContent) => {
+        state.selected_note.content = noteContent
+      },
+      updateNotesList = () => {
+        // context.notes = notes
+        console.log('updating notes list')
+      }
 
     return {
       // data:
@@ -87,7 +88,8 @@ export default {
       notes,
       // methods: 
       select_main_note,
-      handleNoteEdit
+      handleNoteEdit,
+      updateNotesList
     }
   },
   components: {

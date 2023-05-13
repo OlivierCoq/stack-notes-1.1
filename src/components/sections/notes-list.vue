@@ -94,12 +94,10 @@ export default {
       displayed_notes: [],
       new_note_dialog: false,
       new_note: {
-        data: {
-          title: ``,
-          content: `//write code or notes here! :)`,
-          date: new Date().getTime(),
-          error: false
-        }
+        title: ``,
+        content: `//write code or notes here! :)`,
+        date: new Date().getTime(),
+        error: false
       },
       local_path: `${path._rawValue}/local`
     })
@@ -121,13 +119,11 @@ export default {
 
                 state.new_note.error = false
                 state.new_note_dialog = false
-                state.new_note = {
-              data: {
-                content: `//write code or notes here! :)`,
-                date: new Date().getTime(),
-                title: ``,
-                error: false
-              },
+            state.new_note = {
+              content: `//write code or notes here! :)`,
+              date: new Date().getTime(),
+              title: ``,
+              error: false
                 }
               } catch (err) {
                 console.error(err)
