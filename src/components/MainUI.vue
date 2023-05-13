@@ -81,6 +81,7 @@ export default {
 
     return {
       // data:
+      path,
       state,
       // computed:
       notes,
