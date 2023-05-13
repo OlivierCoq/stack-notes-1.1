@@ -83,7 +83,7 @@ export default {
       required: true
     }
   },
-  emits: ['select-note'],
+  emits: ['select-note', 'setup_notes'],
   setup(props, context) {
     // Data:
     const path = ref(app.getAppPath())
@@ -143,6 +143,7 @@ export default {
       // Methods:
       select_note,
       newNote,
+      setup_notes
     }
   }
 }
