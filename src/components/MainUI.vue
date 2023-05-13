@@ -85,7 +85,8 @@ export default {
       // computed:
       notes,
       // methods: 
-      select_main_note    
+      select_main_note,
+      handleNoteEdit
     }
   },
   components: {
