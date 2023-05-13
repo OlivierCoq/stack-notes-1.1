@@ -109,7 +109,7 @@ export default {
             if(!state.new_note.title.length){
               state.new_note.error = 'Title is required.'
             } else {
-              state.displayed_notes.push(state.new_note)
+              state.displayed_notes.push(structuredClone(state.new_note))
               
               
               // Save to file:

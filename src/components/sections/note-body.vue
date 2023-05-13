@@ -8,7 +8,7 @@
         </v-row>
         <v-row>
           <v-col>
-              <div contenteditable v-html="note.data.content" class="gray-1-bg gray-4 body shadow-1" @blur="edit"></div>
+              <div contenteditable v-html="noteBody.content" class="gray-1-bg gray-4 body shadow-1" @blur="edit"></div>
           </v-col>
         </v-row>
       </v-container>
@@ -38,6 +38,7 @@
 <script>
 // import actionBar from './action-bar.vue'
 import { VAceEditor } from 'vue3-ace-editor'
+import { reactive, onBeforeMount, watch } from 'vue'
 export default {
   name: 'NoteBody',
   props: {
@@ -46,17 +47,38 @@ export default {
       required: true
     }
   },
-  setup(props) {
+  emits: ['edit-note'],
+  setup(props, context) {
       // Methods:
+
+      const noteBody = reactive({ content: '' })
+
+      const remapNoteState = () => {
+        noteBody.content = props?.note?.data?.content
+      }
+
+      onBeforeMount(() => {
+        remapNoteState()
+      })
+
+      // check for data update
+      watch(props, () => {
+        remapNoteState()
+      })
+
+    
     const edit = (e) => {
-            props.note.data.content = e.target.innerText
+            noteBody.content = e.target.innerText
+            context.emit('edit-note', noteBody)
+
           },
           addCodeBlock = () => {
             console.log('adding code block')
           }
     return {
       edit,
-      addCodeBlock
+      addCodeBlock,
+      noteBody
     }
   },
   components: {

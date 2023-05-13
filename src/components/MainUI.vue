@@ -9,7 +9,7 @@
       </v-col>
       <v-col cols="8">
           <!-- Selected Note -->
-        <note-body v-if="state.selected_note" :note="state.selected_note" />
+        <note-body v-if="state.selected_note" :note="state.selected_note" @edit-note="handleNoteEdit" />
       </v-col>
     </v-row>
   </v-container>
@@ -72,6 +72,11 @@ export default {
     const select_main_note = (note) => {
       state.selected_note = note
     }
+
+  const handleNoteEdit = (noteContent) => {
+    state.selected_note.data.content = noteContent
+  }
+    
 
 
     return {
