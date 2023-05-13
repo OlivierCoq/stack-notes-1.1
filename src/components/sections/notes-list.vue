@@ -71,7 +71,7 @@
 <script>
 import { reactive, watch, ref, computed, onBeforeMount } from 'vue'
 import fs from 'fs'
-import pathModule from 'path'
+// import pathModule from 'path'
 import { app } from '@electron/remote'
 import 'core-js';
 
@@ -94,10 +94,12 @@ export default {
       displayed_notes: [],
       new_note_dialog: false,
       new_note: {
-        title: ``,
-        content: `//write code or notes here! :)`,
-        date: new Date().getTime(),
-        error: false
+        data: {
+          title: ``,
+          content: `//write code or notes here! :)`,
+          date: new Date().getTime(),
+          error: false
+        }
       },
       local_path: `${path._rawValue}/local`
     })
@@ -108,22 +110,24 @@ export default {
           newNote = () => {
             if(!state.new_note.title.length){
               state.new_note.error = 'Title is required.'
-            } else {
-              state.displayed_notes.push(state.new_note)
-              
-              
-              // Save to file:
-              try {
-                
-                fs.writeFileSync(`${path._rawValue}/local/${state.new_note.title}.json`, JSON.stringify(state.new_note))
+        } else {
+
+          // Save to file:
+          try {
+
+            fs.writeFileSync(`${path._rawValue}/local/${state.new_note.title}.json`, JSON.stringify(state.new_note))
+            state.displayed_notes.push(state.new_note)
+
 
                 state.new_note.error = false
                 state.new_note_dialog = false
                 state.new_note = {
-                  title: ``,
-                  content: `//write code or notes here! :)`,
-                  date: new Date().getTime(),
-                  error: false
+              data: {
+                content: `//write code or notes here! :)`,
+                date: new Date().getTime(),
+                title: ``,
+                error: false
+              },
                 }
               } catch (err) {
                 console.error(err)
