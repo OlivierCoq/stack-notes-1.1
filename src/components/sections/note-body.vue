@@ -101,18 +101,12 @@ export default {
         console.log('adding code block')
       },
       saveNote = () => {
-        // console.log('holy fuck', props.note)
-        // let syncObj = {
-
-        // }
-        // return false
         fs.writeFileSync(`${path._rawValue}/local/${props.note.title}.json`, JSON.stringify(props.note))
         context.emit('saveNote', props.note)
         console.log('saving note')
       },
       confirmDelete = () => {
-        fs.unlink(`${path._rawValue}/local/${props.note.title}.json`, (err) => {
-          console.log('file deleted.')
+        fs.unlink(`${path._rawValue}/local/${props.note.title}.json`, () => {
           state.deleting = false
         })
         context.emit('deleteNote')

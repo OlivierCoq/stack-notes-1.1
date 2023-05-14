@@ -7,8 +7,9 @@
             v-model="state.search" 
             background-color="gray-2-bg"
             color="gray-4"
-            :placeholder="state.displayed_notes.length ? 'Find a note' : 'Create a note!' "
+            :placeholder="state.displayed_notes.length ? 'Find a note' : 'Create a note to get started!' "
             class="search_field mt-0 mb-5 py-0 secondary-font gray-4"
+            :disabled="!state.displayed_notes.length"
           /> 
           <!-- loop through notes -->
           <div class="ctr-notes mt-2">
@@ -105,12 +106,24 @@ export default {
             state.selected_note = note
             context.emit('select-note', note)
           },
-          newNote = () => {
-            if(!state.new_note.title.length){
-              state.new_note.error = 'Title is required.'
-            } else {
+      newNote = () => {
+
+            const name_check = () => { 
+                let name_exists = false
+                state.displayed_notes.forEach(note => {
+                  if (note.title === state.new_note.title) {
+                    name_exists = true
+                  }
+                })
+                return name_exists
+            }
+
+            if (!state.new_note.title.length) { state.new_note.error = 'Title is required.' }
+            else if (name_check()) {
+              state.new_note.error = 'A note with that name already exists.'
+            }
+            else {
               state.displayed_notes.push(structuredClone(state.new_note))
-              
               
               // Save to file:
               try {
