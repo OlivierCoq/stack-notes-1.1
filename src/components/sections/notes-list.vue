@@ -132,12 +132,12 @@ export default {
 
                 state.new_note.error = false
                 state.new_note_dialog = false
-            state.new_note = {
-              content: `//write code or notes here! :)`,
-              date: new Date().getTime(),
-              title: ``,
-              error: false
-                }
+                state.new_note = {
+                  content: `//write code or notes here! :)`,
+                  date: new Date().getTime(),
+                  title: ``,
+                  error: false
+                    }
               } catch (err) {
                 console.error(err)
               }
