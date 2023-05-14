@@ -76,6 +76,7 @@ export default {
               }
               return a.directory ? -1 : 1
             })
+          state.selected_note = false
         })
       },
       handleNoteEdit = (noteContent) => {
