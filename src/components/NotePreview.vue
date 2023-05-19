@@ -10,12 +10,12 @@
 import { NoteFile } from '../types/Files'
 import { PropType, computed } from 'vue'
     export default {
-        setup({ note } : { note: NoteFile}) {
+        setup(props: any) {
             const noteDate = computed(() => {
-                return new Date(note.date).toLocaleDateString()
+                return new Date(props.note.date).toLocaleDateString()
             })
             const notePreview = computed(() => {
-                const preview =  note && note.contents && note.contents.length > 0 ? note.contents[0].content : ''
+                const preview =  props.note && props.note.contents && props.note.contents.length > 0 ? props.note.contents[0].content : ''
                 return preview.replace(/(<([^>]+)>)/gi, "").substring(0, 100)
             })
             return {
