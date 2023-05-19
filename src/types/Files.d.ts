@@ -12,9 +12,3 @@ export interface NoteFile {
     tags: string[];
     contents: FileContents[];
 }
-
-export interface NoteFolder {
-    name: string;
-    path: string;
-    files: File[];
-}
