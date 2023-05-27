@@ -83,7 +83,14 @@ export default {
       console.log("adding new note");
       console.log(state.new_note);
       const postObj = {
-        name: state.new_note.name
+        name: state.new_note.name,
+        date: state.new_note.date, 
+        tags: [],
+        contents: [
+          {
+            content: '<p>this is a markup test for formatting</p>'
+          }
+        ]
       }
       console.log(postObj);
       window.api.invoke("add-new-note", postObj)
