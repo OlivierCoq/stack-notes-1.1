@@ -102,7 +102,7 @@ export default {
 
     onMounted(() => {
       console.log("mounted");
-        window.api.receive("add-new-note-reply", (result) => {
+      window.api.receive("add-new-note-reply", (result) => {
         if (result.success) {
           console.log("File saved successfully:", result.filePath);
         } else {

@@ -1,7 +1,9 @@
-const { app, BrowserWindow, ipcMain, dialog, contextBridge} = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs') 
+
+let mainWindow
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -26,7 +28,7 @@ function createWindow() {
   }
 
   // IPC Methods
-  ipcMain.on("add-new-note", async (event, jsonData) => {
+  ipcMain.handle("add-new-note", async (event, jsonData) => {
     const filePath = dialog.showSaveDialogSync(mainWindow, {
       defaultPath: "data.json",
       filters: [{ name: "JSON Files", extensions: ["json"] }],
@@ -34,15 +36,17 @@ function createWindow() {
 
     if (filePath) {
       try {
-        fs.writeFileSync(filePath, jsonData);
-        event.reply("add-new-note-reply", { success: true, filePath });
+        const jsonString = JSON.stringify(jsonData); // Convert object to JSON string
+        fs.writeFileSync(filePath, jsonString);
+        event.sender.send("add-new-note-reply", { success: true, filePath });
       } catch (error) {
-        event.reply("add-new-note-reply", { success: false, error: error.message });
+        event.sender.send("add-new-note-reply", { success: false, error: error.message });
       }
     } else {
-      event.reply("add-new-note-reply", { success: false, error: "No file path selected" });
+      event.sender.send("add-new-note-reply", { success: false, error: "No file path selected" });
     }
   });
+  // END IPC Methods
 
 }
 

@@ -11,7 +11,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 //   },
 // });
 
-window.ipcRenderer = ipcRenderer;
+// window.ipcRenderer = ipcRenderer;
 
 contextBridge.exposeInMainWorld("api", {
   send: (channel, data) => {
