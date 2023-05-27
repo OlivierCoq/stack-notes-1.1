@@ -55,9 +55,11 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
+
+
 
 export default {
   setup() {
@@ -66,8 +68,6 @@ export default {
       adding_new_note: false,
       new_note: {
         name: "",
-        path: "",
-        size: 1000,
         date: new Date(),
         tags: [],
         contents: [
@@ -76,17 +76,40 @@ export default {
           }
         ]
       }
-    })
+    }) 
 
     // Methods
     const addNewNote = () => {
       console.log("adding new note");
       console.log(state.new_note);
-
-      this.$electron.ipcRenderer.send("add-new-note", state.new_note);
-        
+      const postObj = {
+        name: state.new_note.name
+      }
+      console.log(postObj);
+      window.api.invoke("add-new-note", postObj)
+      .then((result) => {
+          if (result.success) {
+            console.log("File saved successfully:", result.filePath);
+          } else {
+            console.error("File save failed:", result.error);
+          }
+        })
+        .catch((error) => {
+          console.error("An error occurred:", error);
+        });
       state.adding_new_note = false;
     };
+
+    onMounted(() => {
+      console.log("mounted");
+        window.api.receive("add-new-note-reply", (result) => {
+        if (result.success) {
+          console.log("File saved successfully:", result.filePath);
+        } else {
+          console.error("File save failed:", result.error);
+        }
+      })
+    });
 
     return {
       // Data

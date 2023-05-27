@@ -1,6 +1,7 @@
-const { app, BrowserWindow, icpMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, contextBridge} = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const fs = require('fs') 
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -9,7 +10,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '..', 'src', 'preload', 'preload.js'),
     },
   });
 
@@ -23,9 +24,35 @@ function createWindow() {
       win.webContents.openDevTools();
     });
   }
+
+  // IPC Methods
+  ipcMain.on("add-new-note", async (event, jsonData) => {
+    const filePath = dialog.showSaveDialogSync(mainWindow, {
+      defaultPath: "data.json",
+      filters: [{ name: "JSON Files", extensions: ["json"] }],
+    });
+
+    if (filePath) {
+      try {
+        fs.writeFileSync(filePath, jsonData);
+        event.reply("add-new-note-reply", { success: true, filePath });
+      } catch (error) {
+        event.reply("add-new-note-reply", { success: false, error: error.message });
+      }
+    } else {
+      event.reply("add-new-note-reply", { success: false, error: "No file path selected" });
+    }
+  });
+
 }
 
 app.whenReady().then(() => {
+
+  
+
+
+
+
   createWindow();
 
   app.on('activate', () => {
@@ -40,6 +67,8 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+// require('./utils/file_functions');
 
 // Allow DevTools in production mode
 app.on('web-contents-created', (e, webContents) => {

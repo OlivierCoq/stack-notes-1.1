@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
+import { createElectronBuildTasks } from 'vite-plugin-electron-builder'
 
 const path = require('path')
 const pathSrc = path.resolve(__dirname, "src");
@@ -13,6 +14,7 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
+    createElectronBuildTasks()
   ],
   define: { 'process.env': {} },
   resolve: {
@@ -29,6 +31,11 @@ export default defineConfig({
       }
     }
   },
+  resolve: {
+    fallback: {
+      path: require.resolve("path-browserify"),
+    },
+  }
   /* remove the need to specify .vue files https://vitejs.dev/config/#resolve-extensions
   resolve: {
     extensions: [
