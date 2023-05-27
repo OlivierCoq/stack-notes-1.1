@@ -1,5 +1,5 @@
 {
-  "name": "stack-notes-1.1",
+  "name": "StackNotes",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -20,8 +20,10 @@
     "@mdi/font": "5.9.55",
     "core-js": "^3.8.3",
     "electron-is-dev": "^2.0.0",
+    "moment": "^2.29.4",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
+    "vue3-ace-editor": "^2.2.2",
     "vuetify": "npm:@vuetify/nightly@next",
     "webfontloader": "^1.0.0"
   },
@@ -63,6 +65,5 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ],
-  "productName": "Stack Notes"
+  ]
 }

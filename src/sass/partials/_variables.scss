@@ -1,0 +1,42 @@
+// Colors
+
+$primary: #f92672;
+$secondary: #57dada;
+
+$green: #3ECF14;
+
+$gray-1: #404040;
+$gray-2: rgb(36,36,36);
+$gray-3: rgb(47,47,47);
+$gray-4: #F1F1F1;
+
+.primary-color { color: $primary !important;}
+.secondary-color { color: $secondary !important;}
+.green { color: $green !important;}
+.gray-1 { color: $gray-1 !important;}
+.gray-2 { color: $gray-2 !important;}
+.gray-3 { color: $gray-3 !important;}
+.gray-4 { color: $gray-4 !important;}
+
+.primary-bg { background-color: $primary !important;}
+.secondary-bg { background-color: $secondary !important;}
+.green-bg { background-color: $green !important;}
+.gray-1-bg { background-color: $gray-1 !important;}
+.gray-2-bg { background-color: $gray-2 !important;}
+.gray-3-bg { background-color: $gray-3 !important;}
+.gray-4-bg { background-color: $gray-4 !important;}
+
+
+
+// Fonts
+$main-font: 'Nunito-Sans';
+$secondary-font: 'PT-Sans';
+
+.main-font { font-family: $main-font;}
+.secondary-font { font-family: $secondary-font;}
+
+
+// Box shadow
+$shadow: 0 2px 16px 0 #222223ad;
+
+.shadow-1 { box-shadow: $shadow !important;}

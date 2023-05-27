@@ -1,0 +1,43 @@
+.editor {
+    width: 100%;
+    height: 300px;
+    overflow-y:scroll;
+}
+
+#languages {
+  background: $gray-2;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: $shadow;
+  padding: 5px;
+  color: white;
+  border-color: transparent;
+}
+.compile-container {
+  width: 82%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.compile-container {
+
+  #compile { background: transparent; }
+  .delete-editor {
+    background: $primary; 
+    &:hover {
+      background: darken($primary, 15%);
+    }
+  }
+  #compile,
+  .delete-editor {
+    border-color: transparent;
+    color: white;
+    box-shadow: $shadow;
+    margin-right: 5px;
+    padding: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    &:hover { cursor: pointer; }
+  }
+}
