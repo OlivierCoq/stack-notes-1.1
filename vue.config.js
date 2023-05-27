@@ -1,9 +1,6 @@
-// const { defineConfig } = require('@vue/cli-service')
-// module.exports = defineConfig({
-//   transpileDependencies: true
-// })
+const { defineConfig } = require('@vue/cli-service')
 
-module.exports = {
+module.exports = defineConfig({
   css: {
     loaderOptions: {
       scss: {
@@ -13,10 +10,13 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      nodeIntegration: true
+      preload: 'src/preload.ts',
+      builderOptions: {
+        extraResources: ['src', 'src/res/'],
+      },
     },
     chainWebpack: {
       title: 'Stack Notes'
     }
   }
-}
+})

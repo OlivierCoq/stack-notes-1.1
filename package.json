@@ -13,11 +13,12 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@electron/remote": "^2.0.9",
+    "@babel/core": "^7.12.16",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@mdi/font": "^7.2.96",
+    "@vue/cli-plugin-babel": "~5.0.0",
     "core-js": "^3.30.1",
     "flatted": "^3.2.7",
     "material-design-icons-iconfont": "^6.7.0",
@@ -47,5 +48,12 @@
     "not dead",
     "not ie 11"
   ],
-  "productName": "Stack Notes"
+  "productName": "Stack Notes",
+  "electronWebpack": {
+    "main": {
+      "extraEntries": [
+        "./src/preload.ts"
+      ]
+    }
+  }
 }

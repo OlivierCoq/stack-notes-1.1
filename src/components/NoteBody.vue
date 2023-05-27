@@ -56,9 +56,9 @@
 // import actionBar from './action-bar.vue'
 import { VAceEditor } from 'vue3-ace-editor'
 import { reactive, onBeforeMount, watch, ref } from 'vue'
-import fs from 'fs'
-import { app } from '@electron/remote'
-const path = ref(app.getAppPath())
+// import fs from 'fs'
+// import { app } from '@electron/remote'
+// const path = ref(app.getAppPath())
 
 export default {
   name: 'NoteBody',
@@ -101,14 +101,14 @@ export default {
         console.log('adding code block')
       },
       saveNote = () => {
-        fs.writeFileSync(`${path._rawValue}/local/${props.note.title}.json`, JSON.stringify(props.note))
+        // fs.writeFileSync(`${path._rawValue}/local/${props.note.title}.json`, JSON.stringify(props.note))
         context.emit('saveNote', props.note)
         console.log('saving note')
       },
       confirmDelete = () => {
-        fs.unlink(`${path._rawValue}/local/${props.note.title}.json`, () => {
-          state.deleting = false
-        })
+        // fs.unlink(`${path._rawValue}/local/${props.note.title}.json`, () => {
+        //   state.deleting = false
+        // })
         context.emit('deleteNote')
       }
     return {

@@ -1,11 +1,11 @@
 'use strict'
 
 import 'core-js';
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain  } from 'electron'
+import path from 'path'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-require('@electron/remote/main').initialize()
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -18,13 +18,10 @@ async function createWindow() {
     width: 1000,
     height: 800,
     webPreferences: {
-      
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: true,
-      // contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: false,
-      enableRemoteModule: true
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
+      preload: path.join(__dirname, "preload.js") // use a preload script
     }
   })
 
@@ -83,3 +80,10 @@ if (isDevelopment) {
     })
   }
 }
+
+
+// IPC HANDLER EXAMPLES 
+ipcMain.on('test-context-bridge', async(event,args) => {
+  console.log('testing context bridge')
+  event.sender.send('reply-context-bridge','test')
+})
