@@ -1,6 +1,24 @@
-# stack-notes-1.1
+# gpt-hero
 
-An Electron app for CS to bring their programming notes to life.
+## Project setup
+```
+npm install
+```
 
-The old way of taking computer science notes is dead.
-Now you can write your notes and run them too.
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

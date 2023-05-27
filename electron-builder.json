@@ -1,0 +1,27 @@
+{
+  "appId": "StackNotes",
+  "productName": "StackNotes",
+  "directories": {
+    "output": "dist_electron"
+  },
+  "files": [
+    "dist_electron/**/*",
+    "src/background/background.js"
+  ],
+  "win": {
+    "target": "nsis"
+  },
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": [
+      "AppImage",
+      "deb"
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  }
+}
