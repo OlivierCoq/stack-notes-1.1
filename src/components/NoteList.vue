@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, nextTick } from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
 
@@ -111,7 +111,9 @@ export default {
         .then((result) => {
             if (result.success) {
               console.log("File saved successfully:", result.filePath);
-             getNotes()
+             nextTick(() => {
+              getNotes()
+             })
             } else {
               console.error("File save failed:", result.error);
             }
@@ -123,7 +125,7 @@ export default {
     }
 
     
-
+    // Lifecycle Hooks
     onMounted(() => {
       console.log("mounted, motherfucker");
       
@@ -134,6 +136,7 @@ export default {
           // If user added a new note:
       window.api.receive("add-new-note-reply", (result) => {
         if (result.success) {
+          getNotes()
           console.log("File saved successfully:", result.filePath);
         } else {
           console.error("File save failed:", result.error);

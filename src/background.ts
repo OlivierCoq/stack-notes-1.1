@@ -30,7 +30,7 @@ function createWindow() {
 
   // IPC Methods
 
-  // require('./utils/file_actions')
+  // require('./utils/file_actions') // I need to find a way to import this file and use it in the ipcMain.handle methods below
 
     // Adding new note
   ipcMain.handle('add-new-note', async (event, jsonData) => {
