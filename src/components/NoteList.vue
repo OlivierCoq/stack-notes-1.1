@@ -59,6 +59,10 @@ import { reactive, onMounted, nextTick } from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
 
+import { useNotesStore } from "../stores/notes";
+const notesStore = useNotesStore();
+
+const all_notes = notesStore.getNotes()
 
 
 export default {
@@ -76,23 +80,23 @@ export default {
           }
         ]
       },
-      notes: []
+      notes: all_notes
     }) 
 
     // Methods
 
       // From ipc renderer
-    const getNotes = () => {
-      window.api.receive('get-notes-reply', (response) => {
-        if (response.success) {
-          state.notes = response.notes;
-        } else {
-          console.error('Not working', response.error);
-        }
-      });
+    // const getNotes = () => {
+    //   window.api.receive('get-notes-reply', (response) => {
+    //     if (response.success) {
+    //       state.notes = response.notes;
+    //     } else {
+    //       console.error('Not working', response.error);
+    //     }
+    //   });
 
-      window.api.invoke('get-notes')
-    }
+    //   window.api.invoke('get-notes')
+    // }
 
     const addNewNote = () => {
       console.log("adding new note");
@@ -112,7 +116,7 @@ export default {
             if (result.success) {
               console.log("File saved successfully:", result.filePath);
              nextTick(() => {
-              getNotes()
+              // getNotes()
              })
             } else {
               console.error("File save failed:", result.error);
@@ -131,12 +135,12 @@ export default {
       
       
         // Listen for async-reply message from main process 
-      getNotes()
+      // getNotes()
 
           // If user added a new note:
       window.api.receive("add-new-note-reply", (result) => {
         if (result.success) {
-          getNotes()
+          // getNotes()
           console.log("File saved successfully:", result.filePath);
         } else {
           console.error("File save failed:", result.error);
