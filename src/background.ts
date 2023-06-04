@@ -34,8 +34,6 @@ function createWindow() {
 
     // Adding new note
   ipcMain.handle('add-new-note', async (event, jsonData) => {
-
-    console.log('adding new note', jsonData)
     const folderPath = './local_files'; // switched to local_files from dist_electron because I kept overwritting it
     const fileName = `${jsonData.name}.json`;
     const filePath = path.join(folderPath, fileName);

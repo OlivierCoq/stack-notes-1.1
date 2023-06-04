@@ -13,7 +13,14 @@
         class="note-list__search-bar"
       />
     </div>
-    <div class="w-100 d-flex my-2 p-2">
+    <v-divider></v-divider>
+    <note-preview
+      v-for="note in state.notes"
+      :note="note"
+      :key="note.path"
+    ></note-preview>
+<v-divider></v-divider>
+    <div class="w-100 d-flex py-2 p-2 bg-grey-darken-4">
       <v-btn
         color="secondary"
         variant="outlined"
@@ -105,11 +112,6 @@
         </v-dialog>
       </v-btn>
     </div>
-    <note-preview
-      v-for="note in state.notes"
-      :note="note"
-      :key="note.path"
-    ></note-preview>
   </div>
 </template>
 
