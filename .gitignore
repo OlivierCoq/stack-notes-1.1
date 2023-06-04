@@ -1,4 +1,9 @@
 # Logs
+/local_files/*
+!/local_files/readme.md
+
+
+
 logs
 *.log
 npm-debug.log*
