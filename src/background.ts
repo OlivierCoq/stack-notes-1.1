@@ -29,9 +29,14 @@ function createWindow() {
   }
 
   // IPC Methods
+
+  // require('./utils/file_actions')
+
   ipcMain.handle("add-new-note", async (event, jsonData) => {
+
+    console.log('add-new-note!!!!!', jsonData)
     const filePath = dialog.showSaveDialogSync(mainWindow, {
-      defaultPath: "data.json",
+      defaultPath: `${jsonData.name}.json`,
       filters: [{ name: "JSON Files", extensions: ["json"] }],
     });
 

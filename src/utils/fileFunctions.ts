@@ -1,6 +1,7 @@
 import { NoteFile, NoteFileContents } from '../types/Files';
 import { promises as fs } from 'fs'
 
+
 export const fileFunctions = {
     // Returns a NoteFile object from a file path
     async getNotes() : Promise<NoteFile[] | void> {
@@ -21,5 +22,4 @@ export const fileFunctions = {
         console.log(error)
        }
     }
-    
 }
