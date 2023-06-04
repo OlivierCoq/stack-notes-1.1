@@ -1,14 +1,15 @@
 <template>
-<div class="bg-grey-darken-4">
-  <!-- <note-body
-    v-if="state.selected_note"
-    :note="state.selected_note"
-    @edit-note="handleNoteEdit"
-    @deleteNote="updateNotesList"
-  /> -->
+  <div class="bg-grey-darken-4 fill-height">
+    <note-tabs />
   </div>
 </template>
 <script>
+import NoteTabs from "./NoteTabs.vue";
+export default {
+  components: {
+    NoteTabs,
+  },
+};
 
 </script>
 <style lang="scss">
