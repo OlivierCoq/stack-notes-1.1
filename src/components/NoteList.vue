@@ -23,47 +23,101 @@
       >
         <strong>+ New Note</strong>
 
-        <v-dialog v-model="state.adding_new_note"
-          width="400px"
-          theme="dark"
-        >
+        <v-dialog v-model="state.adding_new_note" width="400px" theme="dark">
           <v-card>
-            <v-card-title class="primary-bg gray-4 secondary-font me-2">
-              <span>New Note</span>
-            </v-card-title>
             <v-card-text>
-              <v-text-field
-                v-model="state.new_note.name"
-                label="Note Name"
-                placeholder="Note Name"
-                outlined
-                dense
-                class="w-100"
-              />
+              <div class="d-flex align-center justify-center py-2">
+                <note-icon />
+              </div>
+
+              <div class="d-flex align-center justify-space-between mb-4">
+                <div>
+                  <h3 class="primary-font">Create a note ✍️</h3>
+                  <p class="grey-lighten-3">
+                    Add a new note to your collection.
+                  </p>
+                </div>
+              </div>
+              <v-row class="mb-3">
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="state.new_note.name"
+                    label="Note Name"
+                    persistent-placeholder
+                    density="compact"
+                    class="w-100"
+                    hide-details
+                    variant="underlined"
+                    autofocus
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Created Date"
+                    readonly
+                    persistent-placeholder
+                    density="compact"
+                    class="w-100"
+                    hide-details
+                    :value="currentDate"
+                    variant="underlined"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <!-- replace with actual user data when pinia setup -->
+                  <v-combobox
+                    readonly
+                    :items="allUsers"
+                    v-model="state.new_note.users"
+                    label="Users"
+                    multiple
+                    variant="underlined"
+                    hide-details
+                  >
+                    <template v-slot:selection>
+                      <v-chip size="small">
+                        <template v-slot:prepend>
+                          <v-avatar class="bg-primary text-uppercase" start
+                            >CU</v-avatar
+                          >
+                        </template>
+                        Current User
+                      </v-chip>
+                    </template>
+                  </v-combobox>
+                </v-col>
+              </v-row>
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn text @click="state.adding_new_note = false">Cancel</v-btn>
-              <v-btn color="warning" text @click="addNewNote">Add New Note</v-btn>
+              <v-btn text @click="state.adding_new_note = false" size="small"
+                >Cancel</v-btn
+              >
+              <v-btn
+                color="primary"
+                variant="outlined"
+                @click="addNewNote"
+                size="small"
+                >Add New Note</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-btn>
     </div>
-    <note-preview v-for="note in state.notes" :note="note" :key="note.path"></note-preview>
+    <note-preview
+      v-for="note in state.notes"
+      :note="note"
+      :key="note.path"
+    ></note-preview>
   </div>
 </template>
 
 <script>
-import { reactive, onMounted, nextTick } from "vue";
+import { reactive, onMounted, nextTick, computed, ref } from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
-
-import { useNotesStore } from "../stores/notes";
-const notesStore = useNotesStore();
-
-const all_notes = notesStore.getNotes()
-
+import NoteIcon from "./Icons/NoteIcon.vue";
 
 export default {
   setup() {
@@ -76,89 +130,110 @@ export default {
         tags: [],
         contents: [
           {
-            content: '<p>this is a markup test for formatting</p>'
-          }
-        ]
+            content: "<p>this is a markup test for formatting</p>",
+          },
+        ],
+        users: [
+          // remove when hooking up to live data
+
+          {
+            name: "Current User",
+            initials: "CU",
+          },
+        ],
       },
-      notes: all_notes
-    }) 
+      notes: [],
+    });
+
+    const currentDate = computed(() => {
+      const date = new Date();
+      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    });
+
+    const allUsers = ref([
+      {
+        name: "Current User",
+        initials: "CU",
+      },
+    ]);
 
     // Methods
 
-      // From ipc renderer
-    // const getNotes = () => {
-    //   window.api.receive('get-notes-reply', (response) => {
-    //     if (response.success) {
-    //       state.notes = response.notes;
-    //     } else {
-    //       console.error('Not working', response.error);
-    //     }
-    //   });
+    // From ipc renderer
+    const getNotes = () => {
+      window.api.receive("get-notes-reply", (response) => {
+        if (response.success) {
+          state.notes = response.notes;
+        } else {
+          console.error("Not working", response.error);
+        }
+      });
 
-    //   window.api.invoke('get-notes')
-    // }
+      window.api.invoke("get-notes");
+    };
 
     const addNewNote = () => {
       console.log("adding new note");
       console.log(state.new_note);
       const postObj = {
-        name: state.new_note.name,
-        date: state.new_note.date, 
+        name: encodeURIComponent(state.new_note.name),
+        date: state.new_note.date,
         tags: [],
         contents: [
           {
-            content: '<p>this is a markup test for formatting</p>'
-          }
-        ]
-      }
-      window.api.invoke("add-new-note", postObj)
+            content: "<p>this is a markup test for formatting</p>",
+          },
+        ],
+      };
+      window.api
+        .invoke("add-new-note", postObj)
         .then((result) => {
-            if (result.success) {
-              console.log("File saved successfully:", result.filePath);
-             nextTick(() => {
-              // getNotes()
-             })
-            } else {
-              console.error("File save failed:", result.error);
-            }
-          })
+          if (result.success) {
+            console.log("File saved successfully:", result.filePath);
+            nextTick(() => {
+              getNotes();
+            });
+          } else {
+            console.error("File save failed:", result.error);
+          }
+        })
         .catch((error) => {
           console.error("An error occurred:", error);
         });
       state.adding_new_note = false;
-    }
+    };
 
-    
     // Lifecycle Hooks
     onMounted(() => {
       console.log("mounted, motherfucker");
-      
-      
-        // Listen for async-reply message from main process 
-      // getNotes()
 
-          // If user added a new note:
+      // Listen for async-reply message from main process
+      getNotes();
+
+      // If user added a new note:
       window.api.receive("add-new-note-reply", (result) => {
         if (result.success) {
-          // getNotes()
+          getNotes();
           console.log("File saved successfully:", result.filePath);
         } else {
           console.error("File save failed:", result.error);
         }
-      })
-
+      });
     });
 
     return {
       // Data
       state,
       // Methods
-      addNewNote
+      addNewNote,
+      currentDate,
+      allUsers,
     };
   },
   components: {
     SearchIcon,
-    NotePreview
+    NotePreview,
+    NoteIcon,
   },
 };
 </script>
@@ -168,11 +243,15 @@ export default {
   height: 100%;
   width: 100%;
   &__search-bar {
-   input {
+    input {
       padding-bottom: 0px !important;
     }
   }
-  .w-100 { width: 100%; }
-  .w-90 { width: 90%; }
+  .w-100 {
+    width: 100%;
+  }
+  .w-90 {
+    width: 90%;
+  }
 }
 </style>
