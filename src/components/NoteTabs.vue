@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-tabs v-model="activeNote" fixed-tabs>
+        <v-tabs v-model="activeNote" fixed-tabs height="60px">
             <v-tab>Active Tab</v-tab>
             <v-tab>Second Tab</v-tab>
             <v-tab>Third Tab</v-tab>
