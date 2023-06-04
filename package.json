@@ -50,12 +50,12 @@
     "not dead",
     "not ie 11"
   ],
-  "productName": "Stack Notes",
   "electronWebpack": {
     "main": {
       "extraEntries": [
         "./src/preload.ts"
       ]
     }
-  }
+  },
+  "productName": "Stack Notes"
 }
