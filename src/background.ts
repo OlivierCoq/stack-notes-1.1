@@ -32,9 +32,25 @@ function createWindow() {
 
   // require('./utils/file_actions')
 
-  ipcMain.handle("add-new-note", async (event, jsonData) => {
+    // Adding new note
+  ipcMain.handle('add-new-note', async (event, jsonData) => {
 
-    console.log('add-new-note!!!!!', jsonData)
+    console.log('adding new note', jsonData)
+    const folderPath = './local_files'; // switched to local_files from dist_electron because I kept overwritting it
+    const fileName = `${jsonData.name}.json`;
+    const filePath = path.join(folderPath, fileName);
+  
+    try {
+      const jsonString = JSON.stringify(jsonData); // Convert object to JSON string
+      fs.writeFileSync(filePath, jsonString);
+      event.sender.send('add-new-note-reply', { success: true, filePath });
+    } catch (error) {
+      event.sender.send('add-new-note-reply', { success: false, error: (error as Error).message });
+    }
+  });
+
+  // Editing existing note
+  ipcMain.handle("edit-note", async (event, jsonData) => {
     const filePath = dialog.showSaveDialogSync(mainWindow, {
       defaultPath: `${jsonData.name}.json`,
       filters: [{ name: "JSON Files", extensions: ["json"] }],
@@ -44,14 +60,48 @@ function createWindow() {
       try {
         const jsonString = JSON.stringify(jsonData); // Convert object to JSON string
         fs.writeFileSync(filePath, jsonString);
-        event.sender.send("add-new-note-reply", { success: true, filePath });
+        event.sender.send("edit-note-reply", { success: true, filePath });
       } catch (error) {
-        event.sender.send("add-new-note-reply", { success: false, error: (error as Error).message });
+        event.sender.send("edit-note-reply", { success: false, error: (error as Error).message });
       }
     } else {
-      event.sender.send("add-new-note-reply", { success: false, error: "No file path selected" });
+      event.sender.send("edit-note-reply", { success: false, error: "No file path selected" });
     }
   });
+
+  // Deleting existing note
+  ipcMain.handle("delete-note", async (event, filePath) => {
+    try {
+      fs.unlinkSync(filePath);
+      event.sender.send("delete-note-reply", { success: true });
+    } catch (error) {
+      event.sender.send("delete-note-reply", { success: false, error: (error as Error).message });
+    }
+  });
+
+  // Get all notes
+  ipcMain.handle("get-notes", async (event) => {
+    try {
+      const files = await fs.readdirSync('./local_files')
+      console.log('files', files)
+      // read all files at once and return an array of promises
+      const notes = files.map(async (file: JSON) => {
+
+        const contents = await fs.readFileSync(`./local_files/${file}`, 'utf-8')
+        const note = JSON.parse(contents)
+        return note
+      })
+      // wait until all promises resolve
+      const resolvedNotes = await Promise.all(notes)
+      event.sender.send("get-notes-reply", { success: true, notes: resolvedNotes });
+    } catch (error) {
+      event.sender.send("get-notes-reply", { success: false, error: (error as Error).message });
+    }
+  });
+
+
+  
+
   // END IPC Methods
 
 }

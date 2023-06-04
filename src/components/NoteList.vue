@@ -50,7 +50,7 @@
         </v-dialog>
       </v-btn>
     </div>
-    <!-- <note-preview v-for="note in tempFiles.notes" :note="note" :key="note.path"></note-preview> -->
+    <note-preview v-for="note in state.notes" :note="note" :key="note.path"></note-preview>
   </div>
 </template>
 
@@ -75,10 +75,25 @@ export default {
             content: '<p>this is a markup test for formatting</p>'
           }
         ]
-      }
+      },
+      notes: []
     }) 
 
     // Methods
+
+      // From ipc renderer
+    const getNotes = () => {
+      window.api.receive('get-notes-reply', (response) => {
+        if (response.success) {
+          state.notes = response.notes;
+        } else {
+          console.error('Not working', response.error);
+        }
+      });
+
+      window.api.invoke('get-notes')
+    }
+
     const addNewNote = () => {
       console.log("adding new note");
       console.log(state.new_note);
@@ -92,23 +107,31 @@ export default {
           }
         ]
       }
-      console.log(postObj);
       window.api.invoke("add-new-note", postObj)
-      .then((result) => {
-          if (result.success) {
-            console.log("File saved successfully:", result.filePath);
-          } else {
-            console.error("File save failed:", result.error);
-          }
-        })
+        .then((result) => {
+            if (result.success) {
+              console.log("File saved successfully:", result.filePath);
+             getNotes()
+            } else {
+              console.error("File save failed:", result.error);
+            }
+          })
         .catch((error) => {
           console.error("An error occurred:", error);
         });
       state.adding_new_note = false;
-    };
+    }
+
+    
 
     onMounted(() => {
-      console.log("mounted");
+      console.log("mounted, motherfucker");
+      
+      
+        // Listen for async-reply message from main process 
+      getNotes()
+
+          // If user added a new note:
       window.api.receive("add-new-note-reply", (result) => {
         if (result.success) {
           console.log("File saved successfully:", result.filePath);
@@ -116,6 +139,7 @@ export default {
           console.error("File save failed:", result.error);
         }
       })
+
     });
 
     return {
