@@ -99,9 +99,6 @@ function createWindow() {
     }
   });
 
-
-  
-
   // END IPC Methods
 
 }
