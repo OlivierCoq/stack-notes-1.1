@@ -38,7 +38,7 @@
                   </p>
                 </div>
               </div>
-              <v-row>
+              <v-row class="mb-3">
                 <v-col cols="12">
                   <v-text-field
                     v-model="state.new_note.name"
@@ -176,7 +176,7 @@ export default {
       console.log("adding new note");
       console.log(state.new_note);
       const postObj = {
-        name: state.new_note.name,
+        name: encodeURIComponent(state.new_note.name),
         date: state.new_note.date,
         tags: [],
         contents: [

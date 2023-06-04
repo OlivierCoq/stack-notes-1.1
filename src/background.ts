@@ -85,7 +85,9 @@ function createWindow() {
       const files = await fs.readdirSync('./local_files')
       console.log('files', files)
       // read all files at once and return an array of promises
-      const notes = files.map(async (file: JSON) => {
+      const notes = files
+      .filter((fileName: string) => fileName.includes('.json'))
+      .map(async (file: string) => {
 
         const contents = await fs.readFileSync(`./local_files/${file}`, 'utf-8')
         const note = JSON.parse(contents)
