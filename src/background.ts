@@ -1,89 +1,103 @@
-'use strict'
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
+const isDev = require('electron-is-dev');
+const fs = require('fs') 
 
-import 'core-js';
-import { app, protocol, BrowserWindow, ipcMain  } from 'electron'
-import path from 'path'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
-const isDevelopment = process.env.NODE_ENV !== 'production'
+let mainWindow: any
 
-// Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
-])
-
-async function createWindow() {
-  // Create the browser window.
+function createWindow() {
   const win = new BrowserWindow({
-    width: 1000,
+    width: 1200,
     height: 800,
     webPreferences: {
-      nodeIntegration: false, // is default value after Electron v5
-      contextIsolation: true, // protect against prototype pollution
-      enableRemoteModule: false, // turn off remote
+      nodeIntegration: false,
+      contextIsolation: true,
+      // preload: path.join(__dirname, '..', 'src', 'preload', 'preload.ts'),
       preload: path.join(__dirname, "preload.js") // use a preload script
-    }
-  })
+    },
+  });
 
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
-  } else {
-    createProtocol('app')
-    // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+  // Load the appropriate URL based on development or production mode
+  const url = isDev ? 'http://localhost:8080' : `file://${path.join(__dirname, '../dist_electron/index.html')}`;
+  win.loadURL(url);
+
+  // Open the DevTools when in development mode
+  if (isDev) {
+    win.webContents.on('did-frame-finish-load', () => {
+      win.webContents.openDevTools();
+    });
   }
-}
 
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+  // IPC Methods
+  ipcMain.handle("add-new-note", async (event, jsonData) => {
+    const filePath = dialog.showSaveDialogSync(mainWindow, {
+      defaultPath: "data.json",
+      filters: [{ name: "JSON Files", extensions: ["json"] }],
+    });
 
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
-})
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS3_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install')
-    }
-  }
-  createWindow()
-})
-
-// Exit cleanly on request from parent process in development mode.
-if (isDevelopment) {
-  if (process.platform === 'win32') {
-    process.on('message', (data) => {
-      if (data === 'graceful-exit') {
-        app.quit()
+    if (filePath) {
+      try {
+        const jsonString = JSON.stringify(jsonData); // Convert object to JSON string
+        fs.writeFileSync(filePath, jsonString);
+        event.sender.send("add-new-note-reply", { success: true, filePath });
+      } catch (error) {
+        event.sender.send("add-new-note-reply", { success: false, error: (error as Error).message });
       }
-    })
-  } else {
-    process.on('SIGTERM', () => {
-      app.quit()
-    })
-  }
+    } else {
+      event.sender.send("add-new-note-reply", { success: false, error: "No file path selected" });
+    }
+  });
+  // END IPC Methods
+
 }
 
+app.whenReady().then(() => {
 
-// IPC HANDLER EXAMPLES 
-ipcMain.on('test-context-bridge', async(event,args) => {
-  console.log('testing context bridge')
-  event.sender.send('reply-context-bridge','test')
-})
+  createWindow();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+// require('./utils/file_functions');
+
+// Allow DevTools in production mode
+// app.on('web-contents-created', (e, webContents) => {
+//   if (isDev) {
+//     webContents.on('context-menu', (e, params) => {
+//       const { x, y } = params;
+
+//       Menu.buildFromTemplate([
+//         {
+//           label: 'Inspect element',
+//           click: () => {
+//             webContents.inspectElement(x, y);
+//           },
+//         },
+//       ]).popup();
+//     });
+//   }
+// });
+
+// Install Vue Devtools when in development mode
+if (isDev) {
+  app.whenReady().then(() => {
+    const {
+      default: installExtension,
+      VUEJS_DEVTOOLS,
+    } = require('electron-devtools-installer');
+
+    installExtension(VUEJS_DEVTOOLS)
+      .then((name :String) => console.log(`Added Extension: ${name}`))
+      .catch((err :Object) => console.log('An error occurred while installing Vue Devtools:', err));
+  });
+}
