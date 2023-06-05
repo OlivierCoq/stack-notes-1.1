@@ -175,10 +175,9 @@ export default {
     };
 
     const addNewNote = () => {
-      console.log("adding new note");
-      console.log(state.new_note);
+
       const postObj = {
-        name: encodeURIComponent(state.new_note.name),
+        name: state.new_note.name,
         date: state.new_note.date,
         tags: [],
         contents: [
