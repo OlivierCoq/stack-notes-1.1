@@ -35,7 +35,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-, "src/preload.ts", "src/stores/notes.js"  ],
+, "src/preload.ts", "src/stores/notes.ts"  ],
   "exclude": [
     "node_modules"
   ]

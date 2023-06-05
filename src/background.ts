@@ -1,7 +1,15 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const path = require('path');
-const isDev = require('electron-is-dev');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const path = require('path')
+const isDev = require('electron-is-dev')
 const fs = require('fs') 
+
+
+// Store data
+
+// import { createPinia } from 'pinia'
+// import { useNotesStore, Note } from "./stores/notes";
+
+// const pinia = createPinia()
 
 let mainWindow: any
 
@@ -29,8 +37,6 @@ function createWindow() {
   }
 
   // IPC Methods
-
-  // require('./utils/file_actions') // I need to find a way to import this file and use it in the ipcMain.handle methods below
 
     // Adding new note
   ipcMain.handle('add-new-note', async (event, jsonData) => {
@@ -93,6 +99,13 @@ function createWindow() {
       })
       // wait until all promises resolve
       const resolvedNotes = await Promise.all(notes)
+
+          // bring dat shit to da store:
+      // const notesStore = useNotesStore()
+
+      // notesStore.notes = resolvedNotes
+
+      // send the resolved notes to the renderer process
       event.sender.send("get-notes-reply", { success: true, notes: resolvedNotes });
     } catch (error) {
       event.sender.send("get-notes-reply", { success: false, error: (error as Error).message });

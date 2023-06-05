@@ -1,7 +1,6 @@
 <template>
-  <div class="note-list bg-grey-darken-4 d-flex justify-space-between flex-column">
-    <div>
-      <div class="d-flex align-center px-5 pt-1">
+  <div class="note-list bg-grey-darken-3">
+    <div class="d-flex align-center bg-grey-darken-4 px-5 pt-1">
       <search-icon class="pr-2"></search-icon>
       <v-text-field
         variant="plain"
@@ -15,18 +14,13 @@
       />
     </div>
     <v-divider></v-divider>
-    
-
     <note-preview
-      v-for="note in state.notes"
+      v-for="note in notes" 
       :note="note"
       :key="note.path"
     ></note-preview>
-    </div>
-    
-
-    <div class="d-flex align-center justify-center mb-3">
-      
+<v-divider></v-divider>
+    <div class="w-100 d-flex py-2 p-2 bg-grey-darken-4">
       <v-btn
         color="secondary"
         variant="outlined"
@@ -122,14 +116,19 @@
 </template>
 
 <script>
-import { reactive, onMounted, nextTick, computed, ref } from "vue";
+import { useNotesStore } from '../stores/notes'
+import { reactive, onBeforeMount, onMounted, nextTick, computed, ref } from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
 import NoteIcon from "./Icons/NoteIcon.vue";
 
+
+
+
 export default {
   setup() {
     // will be replaced with files loaded out of fs into pinia
+    const store = useNotesStore()
     const state = reactive({
       adding_new_note: false,
       new_note: {
@@ -148,9 +147,8 @@ export default {
             name: "Current User",
             initials: "CU",
           },
-        ],
-      },
-      notes: [],
+        ]
+      }
     });
 
     const currentDate = computed(() => {
@@ -168,21 +166,54 @@ export default {
     // Methods
 
     // From ipc renderer
-    const getNotes = () => {
-      window.api.receive("get-notes-reply", (response) => {
-        if (response.success) {
-          state.notes = response.notes;
-        } else {
-          console.error("Not working", response.error);
-        }
-      });
 
-      window.api.invoke("get-notes");
-    };
+        // Async version:
+        const getNotes = async () => {
+          try {
+            const response = await window.api.invoke('get-notes');
+            if (response && response.success) {
+              console.log('Received notes:', response.notes);
+              store.notes = response.notes
+            } 
+          } catch (error) {
+            console.error(`Houston, we have a problem: ${error}`);
+          }
+        }
+
+          // Async2
+      // const getNotes = async () => {
+      //   try {
+      //     const response = await window.api.receive("get-notes-reply", (response) => {
+      //       if (response.success) {
+      //         const receivedNotes = response.notes;
+      //         store.notes = receivedNotes
+      //       } else {
+      //         console.error("Not working", response.error);
+      //       }
+      //     });
+      //   } catch (error) {
+      //       console.error(`Houston, we have a problem: ${error}`);
+      //     }
+      // }
+      
+    // const getNotes = () => {
+    //   window.api.receive("get-notes-reply", (response) => {
+    //     if (response.success) {
+    //       const receivedNotes = response.notes;
+    //       store.notes = receivedNotes
+    //     } else {
+    //       console.error("Not working", response.error);
+    //     }
+    //   });
+
+    //   window.api.invoke("get-notes");
+    // };
 
     const addNewNote = () => {
+      console.log("adding new note");
+      console.log(state.new_note);
       const postObj = {
-        name: state.new_note.name,
+        name: encodeURIComponent(state.new_note.name),
         date: state.new_note.date,
         tags: [],
         contents: [
@@ -210,11 +241,14 @@ export default {
     };
 
     // Lifecycle Hooks
-    onMounted(() => {
+    onBeforeMount(() => {
       console.log("mounted, motherfucker");
 
       // Listen for async-reply message from main process
-      getNotes();
+      
+      nextTick(()=> {
+        getNotes()
+      })
 
       // If user added a new note:
       window.api.receive("add-new-note-reply", (result) => {
@@ -227,8 +261,12 @@ export default {
       });
     });
 
+      // Experimenting with lifestyle hook timing
+    // onMounted(()=> { getNotes() })
+
     return {
       // Data
+      notes: store.notes,
       state,
       // Methods
       addNewNote,
@@ -246,7 +284,8 @@ export default {
 
 <style lang="scss" scoped>
 .note-list {
-  height: calc(100vh - 65px);
+  height: 100%;
+  width: 100%;
   &__search-bar {
     input {
       padding-bottom: 0px !important;
