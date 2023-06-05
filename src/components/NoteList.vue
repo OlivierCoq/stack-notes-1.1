@@ -1,6 +1,7 @@
 <template>
-  <div class="note-list bg-grey-darken-3">
-    <div class="d-flex align-center bg-grey-darken-4 px-5 pt-1">
+  <div class="note-list bg-grey-darken-4 d-flex justify-space-between flex-column">
+    <div>
+      <div class="d-flex align-center px-5 pt-1">
       <search-icon class="pr-2"></search-icon>
       <v-text-field
         variant="plain"
@@ -14,13 +15,18 @@
       />
     </div>
     <v-divider></v-divider>
+    
+
     <note-preview
       v-for="note in state.notes"
       :note="note"
       :key="note.path"
     ></note-preview>
-<v-divider></v-divider>
-    <div class="w-100 d-flex py-2 p-2 bg-grey-darken-4">
+    </div>
+    
+
+    <div class="d-flex align-center justify-center mb-3">
+      
       <v-btn
         color="secondary"
         variant="outlined"
@@ -175,10 +181,8 @@ export default {
     };
 
     const addNewNote = () => {
-      console.log("adding new note");
-      console.log(state.new_note);
       const postObj = {
-        name: encodeURIComponent(state.new_note.name),
+        name: state.new_note.name,
         date: state.new_note.date,
         tags: [],
         contents: [
@@ -242,8 +246,7 @@ export default {
 
 <style lang="scss" scoped>
 .note-list {
-  height: 100%;
-  width: 100%;
+  height: calc(100vh - 65px);
   &__search-bar {
     input {
       padding-bottom: 0px !important;
