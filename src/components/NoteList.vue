@@ -130,6 +130,8 @@ import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
 import NoteIcon from "./Icons/NoteIcon.vue";
 
+import { v4 as uuidv4 } from "uuid";
+
 export default {
   setup() {
     // will be replaced with files loaded out of fs into pinia
@@ -138,6 +140,7 @@ export default {
       search: "",
       adding_new_note: false,
       new_note: {
+        id: uuidv4(),
         name: "",
         date: new Date(),
         tags: [],
@@ -180,8 +183,6 @@ export default {
     // Methods
 
     // From ipc renderer
-
-    // Async version:
     const getNotes = async () => {
       try {
         const response = await window.api.invoke("get-notes");
