@@ -15,11 +15,11 @@
     </div>
     <v-divider></v-divider>
     <note-preview
-      v-for="note in notes" 
+      v-for="note in state.notes"
       :note="note"
       :key="note.path"
     ></note-preview>
-<v-divider></v-divider>
+    <v-divider></v-divider>
     <div class="w-100 d-flex py-2 p-2 bg-grey-darken-4">
       <v-btn
         color="secondary"
@@ -116,19 +116,24 @@
 </template>
 
 <script>
-import { useNotesStore } from '../stores/notes'
-import { reactive, onBeforeMount, onMounted, nextTick, computed, ref } from "vue";
+import { useNotesStore } from "../stores/notes";
+import {
+  reactive,
+  onBeforeMount,
+  onMounted,
+  nextTick,
+  computed,
+  ref,
+  watch,
+} from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
 import NoteIcon from "./Icons/NoteIcon.vue";
 
-
-
-
 export default {
   setup() {
     // will be replaced with files loaded out of fs into pinia
-    const store = useNotesStore()
+    const store = useNotesStore();
     const state = reactive({
       adding_new_note: false,
       new_note: {
@@ -147,8 +152,9 @@ export default {
             name: "Current User",
             initials: "CU",
           },
-        ]
-      }
+        ],
+      },
+      notes: [],
     });
 
     const currentDate = computed(() => {
@@ -167,35 +173,42 @@ export default {
 
     // From ipc renderer
 
-        // Async version:
-        const getNotes = async () => {
-          try {
-            const response = await window.api.invoke('get-notes');
-            if (response && response.success) {
-              console.log('Received notes:', response.notes);
-              store.notes = response.notes
-            } 
-          } catch (error) {
-            console.error(`Houston, we have a problem: ${error}`);
-          }
+    // Async version:
+    const getNotes = async () => {
+      try {
+        const response = await window.api.invoke("get-notes");
+        if (response && response.success) {
+          console.log("Received notes:", response.notes);
+          store.notes = response.notes;
         }
+      } catch (error) {
+        console.error(`Houston, we have a problem: ${error}`);
+      }
+    };
 
-          // Async2
-      // const getNotes = async () => {
-      //   try {
-      //     const response = await window.api.receive("get-notes-reply", (response) => {
-      //       if (response.success) {
-      //         const receivedNotes = response.notes;
-      //         store.notes = receivedNotes
-      //       } else {
-      //         console.error("Not working", response.error);
-      //       }
-      //     });
-      //   } catch (error) {
-      //       console.error(`Houston, we have a problem: ${error}`);
-      //     }
-      // }
-      
+    // watch store
+
+    watch(() => store.notes, (value) => {
+      console.log("testing change");
+      state.notes = value;
+    }, { deep: true });
+
+    // Async2
+    // const getNotes = async () => {
+    //   try {
+    //     const response = await window.api.receive("get-notes-reply", (response) => {
+    //       if (response.success) {
+    //         const receivedNotes = response.notes;
+    //         store.notes = receivedNotes
+    //       } else {
+    //         console.error("Not working", response.error);
+    //       }
+    //     });
+    //   } catch (error) {
+    //       console.error(`Houston, we have a problem: ${error}`);
+    //     }
+    // }
+
     // const getNotes = () => {
     //   window.api.receive("get-notes-reply", (response) => {
     //     if (response.success) {
@@ -245,11 +258,7 @@ export default {
       console.log("mounted, motherfucker");
 
       // Listen for async-reply message from main process
-      
-      nextTick(()=> {
-        getNotes()
-      })
-
+      getNotes();
       // If user added a new note:
       window.api.receive("add-new-note-reply", (result) => {
         if (result.success) {
@@ -261,12 +270,11 @@ export default {
       });
     });
 
-      // Experimenting with lifestyle hook timing
+    // Experimenting with lifestyle hook timing
     // onMounted(()=> { getNotes() })
 
     return {
       // Data
-      notes: store.notes,
       state,
       // Methods
       addNewNote,
