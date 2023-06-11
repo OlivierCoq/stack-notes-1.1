@@ -124,7 +124,6 @@ import {
   nextTick,
   computed,
   ref,
-  watch,
 } from "vue";
 import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
@@ -133,7 +132,7 @@ import NoteIcon from "./Icons/NoteIcon.vue";
 export default {
   setup() {
     // will be replaced with files loaded out of fs into pinia
-    const store = reactive(useNotesStore());
+    const store = useNotesStore();
     const state = reactive({
       adding_new_note: false,
       new_note: {
