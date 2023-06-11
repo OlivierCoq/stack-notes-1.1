@@ -20,10 +20,16 @@ interface Note {
 export const useNotesStore = defineStore('notes', {
   state: () => ({ 
     notes: [] as Note[],
+    openNotes: [] as Note[],
+    activeNote: {} as Note
   }),
   getters: {
   },
   actions: {
+    openNote(note: Note) :void {
+      this.activeNote = note
+      // push into openNotes
+    },
     // getNotes() {
     //   const local_notes = window.api.invoke('get-notes')
     // },
