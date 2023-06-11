@@ -15,7 +15,7 @@
     </div>
     <v-divider></v-divider>
     <note-preview
-      v-for="note in state.notes"
+      v-for="note in store.notes"
       :note="note"
       :key="note.path"
     ></note-preview>
@@ -133,7 +133,7 @@ import NoteIcon from "./Icons/NoteIcon.vue";
 export default {
   setup() {
     // will be replaced with files loaded out of fs into pinia
-    const store = useNotesStore();
+    const store = reactive(useNotesStore());
     const state = reactive({
       adding_new_note: false,
       new_note: {
@@ -154,7 +154,6 @@ export default {
           },
         ],
       },
-      notes: [],
     });
 
     const currentDate = computed(() => {
@@ -186,12 +185,6 @@ export default {
       }
     };
 
-    // watch store
-
-    watch(() => store.notes, (value) => {
-      console.log("testing change");
-      state.notes = value;
-    }, { deep: true });
 
     // Async2
     // const getNotes = async () => {
@@ -280,6 +273,7 @@ export default {
       addNewNote,
       currentDate,
       allUsers,
+      store
     };
   },
   components: {
