@@ -26,6 +26,27 @@ export const useNotesStore = defineStore('notes', {
   getters: {
   },
   actions: {
+    openNote(note: Note) :void {
+      this.activeNote = note
+      // push into openNotes
+    },
+    // getNotes() {
+    //   const local_notes = window.api.invoke('get-notes')
+    // },
+    // async getNotes() {
+    //   try {
+    //     window.api.receive('get-notes-reply', (response) => {
+    //       if (response.success) {
+    //         this.notes = response.notes
+    //         return this.notes
+    //       } else {
+    //         return response.error
+    //       }
+    //     })
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
   }
 })
 

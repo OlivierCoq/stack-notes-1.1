@@ -11,11 +11,12 @@
         rounded="0"
         elevation="0"
         class="note-list__search-bar"
+        v-model="state.search"
       />
     </div>
     <v-divider></v-divider>
     <note-preview
-      v-for="note in store.notes"
+      v-for="note in notes"
       :note="note"
       :key="note.path"
     ></note-preview>
@@ -136,6 +137,7 @@ export default {
     // will be replaced with files loaded out of fs into pinia
     const store = useNotesStore();
     const state = reactive({
+      search: "",
       adding_new_note: false,
       new_note: {
         id: uuidv4(),
@@ -157,6 +159,14 @@ export default {
         ],
       },
     });
+
+    const notes = computed(() =>
+      state.search === ""
+        ? store.notes
+        : store.notes.filter((item) =>
+            item.name.toLowerCase().includes(state.search.toLowerCase())
+          )
+    );
 
     const currentDate = computed(() => {
       const date = new Date();
@@ -243,7 +253,7 @@ export default {
       addNewNote,
       currentDate,
       allUsers,
-      store
+      notes,
     };
   },
   components: {
