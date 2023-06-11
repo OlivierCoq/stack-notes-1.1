@@ -106,9 +106,9 @@ function createWindow() {
       // notesStore.notes = resolvedNotes
 
       // send the resolved notes to the renderer process
-      event.sender.send("get-notes-reply", { success: true, notes: resolvedNotes });
+      return { success: true, notes: resolvedNotes }
     } catch (error) {
-      event.sender.send("get-notes-reply", { success: false, error: (error as Error).message });
+      return { success: false, error: (error as Error).message }
     }
   });
 
