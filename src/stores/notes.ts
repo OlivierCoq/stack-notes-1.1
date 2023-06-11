@@ -15,6 +15,7 @@ interface Note {
   date: Date;
   tags: string[];
   contents: NoteFileContents[];
+  id: string;
 }
 
 export const useNotesStore = defineStore('notes', {
@@ -29,6 +30,8 @@ export const useNotesStore = defineStore('notes', {
     openNote(note: Note) :void {
       this.activeNote = note
       // push into openNotes
+      if(this.openNotes.find(item => note.id === item.id)) return
+      this.openNotes.push(note)
     },
     // getNotes() {
     //   const local_notes = window.api.invoke('get-notes')
