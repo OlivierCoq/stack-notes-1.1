@@ -129,6 +129,8 @@ import SearchIcon from "./Icons/SearchIcon.vue";
 import NotePreview from "./NotePreview.vue";
 import NoteIcon from "./Icons/NoteIcon.vue";
 
+import { v4 as uuidv4 } from "uuid";
+
 export default {
   setup() {
     // will be replaced with files loaded out of fs into pinia
@@ -136,6 +138,7 @@ export default {
     const state = reactive({
       adding_new_note: false,
       new_note: {
+        id: uuidv4(),
         name: "",
         date: new Date(),
         tags: [],
@@ -170,8 +173,6 @@ export default {
     // Methods
 
     // From ipc renderer
-
-    // Async version:
     const getNotes = async () => {
       try {
         const response = await window.api.invoke("get-notes");
@@ -183,36 +184,6 @@ export default {
         console.error(`Houston, we have a problem: ${error}`);
       }
     };
-
-
-    // Async2
-    // const getNotes = async () => {
-    //   try {
-    //     const response = await window.api.receive("get-notes-reply", (response) => {
-    //       if (response.success) {
-    //         const receivedNotes = response.notes;
-    //         store.notes = receivedNotes
-    //       } else {
-    //         console.error("Not working", response.error);
-    //       }
-    //     });
-    //   } catch (error) {
-    //       console.error(`Houston, we have a problem: ${error}`);
-    //     }
-    // }
-
-    // const getNotes = () => {
-    //   window.api.receive("get-notes-reply", (response) => {
-    //     if (response.success) {
-    //       const receivedNotes = response.notes;
-    //       store.notes = receivedNotes
-    //     } else {
-    //       console.error("Not working", response.error);
-    //     }
-    //   });
-
-    //   window.api.invoke("get-notes");
-    // };
 
     const addNewNote = () => {
       console.log("adding new note");

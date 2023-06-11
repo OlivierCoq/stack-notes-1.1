@@ -20,27 +20,12 @@ interface Note {
 export const useNotesStore = defineStore('notes', {
   state: () => ({ 
     notes: [] as Note[],
+    openNotes: [] as Note[],
+    activeNote: {} as Note
   }),
   getters: {
   },
   actions: {
-    // getNotes() {
-    //   const local_notes = window.api.invoke('get-notes')
-    // },
-    // async getNotes() {
-    //   try {
-    //     window.api.receive('get-notes-reply', (response) => {
-    //       if (response.success) {
-    //         this.notes = response.notes
-    //         return this.notes
-    //       } else {
-    //         return response.error
-    //       }
-    //     })
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },
   }
 })
 
