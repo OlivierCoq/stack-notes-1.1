@@ -11,11 +11,12 @@
         rounded="0"
         elevation="0"
         class="note-list__search-bar"
+        v-model="state.search"
       />
     </div>
     <v-divider></v-divider>
     <note-preview
-      v-for="note in store.notes"
+      v-for="note in notes"
       :note="note"
       :key="note.path"
     ></note-preview>
@@ -134,6 +135,7 @@ export default {
     // will be replaced with files loaded out of fs into pinia
     const store = useNotesStore();
     const state = reactive({
+      search: "",
       adding_new_note: false,
       new_note: {
         name: "",
@@ -154,6 +156,14 @@ export default {
         ],
       },
     });
+
+    const notes = computed(() =>
+      state.search === ""
+        ? store.notes
+        : store.notes.filter((item) =>
+            item.name.toLowerCase().includes(state.search.toLowerCase())
+          )
+    );
 
     const currentDate = computed(() => {
       const date = new Date();
@@ -183,36 +193,6 @@ export default {
         console.error(`Houston, we have a problem: ${error}`);
       }
     };
-
-
-    // Async2
-    // const getNotes = async () => {
-    //   try {
-    //     const response = await window.api.receive("get-notes-reply", (response) => {
-    //       if (response.success) {
-    //         const receivedNotes = response.notes;
-    //         store.notes = receivedNotes
-    //       } else {
-    //         console.error("Not working", response.error);
-    //       }
-    //     });
-    //   } catch (error) {
-    //       console.error(`Houston, we have a problem: ${error}`);
-    //     }
-    // }
-
-    // const getNotes = () => {
-    //   window.api.receive("get-notes-reply", (response) => {
-    //     if (response.success) {
-    //       const receivedNotes = response.notes;
-    //       store.notes = receivedNotes
-    //     } else {
-    //       console.error("Not working", response.error);
-    //     }
-    //   });
-
-    //   window.api.invoke("get-notes");
-    // };
 
     const addNewNote = () => {
       console.log("adding new note");
@@ -272,7 +252,7 @@ export default {
       addNewNote,
       currentDate,
       allUsers,
-      store
+      notes,
     };
   },
   components: {
