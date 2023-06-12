@@ -1,6 +1,6 @@
 <template>
   <div class="bg-grey-darken-4 main-ui">
-    <!-- <note-tabs class="main-ui__tabs" /> -->
+    <note-tabs class="main-ui__tabs" />
     <app-editor class="main-ui__editor pa-5" />
   </div>
 </template>

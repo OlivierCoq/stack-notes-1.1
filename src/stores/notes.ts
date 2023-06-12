@@ -4,9 +4,6 @@ export interface NoteFileContents {
   content: JSON;
 }
 
-const api = (window as any).api;
-
-
 // Notes type. Taken from src/types/Files.d.ts
 interface Note {
   name: string;
@@ -33,23 +30,6 @@ export const useNotesStore = defineStore('notes', {
       if(this.openNotes.find(item => note.id === item.id)) return
       this.openNotes.push(note)
     },
-    // getNotes() {
-    //   const local_notes = window.api.invoke('get-notes')
-    // },
-    // async getNotes() {
-    //   try {
-    //     window.api.receive('get-notes-reply', (response) => {
-    //       if (response.success) {
-    //         this.notes = response.notes
-    //         return this.notes
-    //       } else {
-    //         return response.error
-    //       }
-    //     })
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },
   }
 })
 

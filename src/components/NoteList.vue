@@ -134,7 +134,8 @@ import { v4 as uuidv4 } from "uuid";
 
 export default {
   setup() {
-    // will be replaced with files loaded out of fs into pinia
+    // DATA
+      // will be replaced with files loaded out of fs into pinia
     const store = useNotesStore();
     const state = reactive({
       search: "",
@@ -146,7 +147,7 @@ export default {
         tags: [],
         contents: [
           {
-            content: "<p>this is a markup test for formatting</p>",
+            content: "<p>You've created a new note with Stack Notes 🎉 Start writing code here 👨‍💻👩‍💻</p>",
           },
         ],
         users: [
@@ -160,6 +161,7 @@ export default {
       },
     });
 
+    // Computed
     const notes = computed(() =>
       state.search === ""
         ? store.notes
@@ -199,12 +201,13 @@ export default {
       console.log("adding new note");
       console.log(state.new_note);
       const postObj = {
+        id: uuidv4(),
         name: state.new_note.name,
         date: state.new_note.date,
         tags: [],
         contents: [
           {
-            content: "<p>this is a markup test for formatting</p>",
+            content: "<p>You've created a new note with Stack Notes 🎉 Start writing code here 👨‍💻👩‍💻</p>",
           },
         ],
       };
@@ -227,7 +230,7 @@ export default {
     };
 
     // Lifecycle Hooks
-    onBeforeMount(() => {
+    onBeforeMount(() => { 
       console.log("mounted, motherfucker");
 
       // Listen for async-reply message from main process
@@ -254,6 +257,7 @@ export default {
       currentDate,
       allUsers,
       notes,
+
     };
   },
   components: {
