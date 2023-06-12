@@ -218,6 +218,7 @@ export default {
             console.log("File saved successfully:", result.filePath);
             nextTick(() => {
               getNotes();
+              store.activeNote = postObj;
             });
           } else {
             console.error("File save failed:", result.error);
