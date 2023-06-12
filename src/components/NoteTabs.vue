@@ -2,7 +2,7 @@
     <div>
         <v-tabs v-model="store.activeNote" fixed-tabs height="60px">
             <v-tab v-for="(note, a) in store.openNotes" :key="a" :value="note">{{ note.name }} 
-                &nbsp;&nbsp;<span class="close" @click="removeTab(note)">x</span>
+                &nbsp;&nbsp;<span class="close" @click="removeTab(note)">x</span> 
             </v-tab>
         </v-tabs>
         <v-divider></v-divider>
