@@ -1,6 +1,6 @@
 <template>
-  <div class="note-list bg-grey-darken-3">
-    <div class="d-flex align-center bg-grey-darken-4 px-5 pt-1">
+  <div class="note-list bg-grey-darken-3 overflow-scroll">
+    <div class="d-flex align-center bg-grey-darken-4 px-5 pt-1 position-relative">
       <search-icon class="pr-2"></search-icon>
       <v-text-field
         variant="plain"
@@ -21,7 +21,7 @@
       :key="note.path"
     ></note-preview>
     <v-divider></v-divider>
-    <div class="w-100 d-flex py-2 p-2 bg-grey-darken-4">
+    <div class="w-100 d-flex py-2 p-2 bg-grey-darken-4 position-absolute ctr-new_note_btn">
       <v-btn
         color="secondary"
         variant="outlined"
@@ -284,5 +284,6 @@ export default {
   .w-90 {
     width: 90%;
   }
+  .ctr-new_note_btn { bottom: 0 !important; }
 }
 </style>

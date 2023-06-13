@@ -11,10 +11,8 @@ export default {
     const store = useNotesStore();
     const editor = new Editor({
       extensions: [StarterKit],
-      content: store.activeNote.contents[0].content,
-      // content: `<p>You've created a new note with Stack Notes 🎉 Start writing code here 👨‍💻👩‍💻</p>`,
-      // content: props.note.contents[0].content,
-    });
+      content: store.activeNote.contents ? store.activeNote.contents[0].content : '',
+    })
 
     return {
       store,

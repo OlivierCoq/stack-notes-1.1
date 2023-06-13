@@ -1,8 +1,11 @@
 <template>
-    <div>
-        <v-tabs v-model="store.activeNote" fixed-tabs height="60px">
-            <v-tab v-for="(note, a) in store.openNotes" :key="a" :value="note">{{ note.name }} 
-                &nbsp;&nbsp;<span class="close" @click="removeTab(note)">x</span> 
+    <div class="tabs-container w-100 overflow-x-auto">
+        <v-tabs v-model="store.activeNote" fixed-tabs density="comfortable" grow center-active>
+            <v-tab v-for="(note, a) in store.openNotes" :key="a" :value="note" class="d-flex">
+                {{ note.name }} 
+                <!-- <v-spacer/> -->
+                <div class="spacer"></div>
+                <span class="close" @click="removeTab(note)">x</span> 
             </v-tab>
         </v-tabs>
         <v-divider></v-divider>
@@ -13,7 +16,7 @@
 import { useNotesStore } from "../stores/notes";
 import { reactive, toRefs } from 'vue'
 
-export default {
+export default  {
     setup () {
         const store = useNotesStore();
         const removeTab = (note) => {
@@ -30,6 +33,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .w-100 { width: 100% !important; }
+    .spacer { width: 2.5em; }
     .close {
         cursor: pointer;
         font-size: 10px;
