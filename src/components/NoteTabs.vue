@@ -5,7 +5,9 @@
                 {{ note.name }} 
                 <!-- <v-spacer/> -->
                 <div class="spacer"></div>
-                <span class="close" @click="removeTab(note)">x</span> 
+                <span class="close" @click="removeTab(note)">
+                    <close/>    
+                </span> 
             </v-tab>
         </v-tabs>
         <v-divider></v-divider>
@@ -15,6 +17,7 @@
 <script>
 import { useNotesStore } from "../stores/notes";
 import { reactive, toRefs } from 'vue'
+import Close from "./Icons/Close.vue";
 
 export default  {
     setup () {
@@ -28,6 +31,9 @@ export default  {
             // methods
             removeTab
         }
+    },
+    components: {
+        Close
     }
 }
 </script>
@@ -44,6 +50,9 @@ export default  {
            background-color: #bab6b62b;
            border-radius: 50%;
         //    padding: 3px;
+        }
+        svg {
+            max-width: 8px !important;
         }
     }
 </style>
