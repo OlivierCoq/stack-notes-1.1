@@ -278,6 +278,7 @@ export default {
 // This is the only height that works for the note list
 .note-list {
   height: 44.2em;
+  overflow: hidden;
 
   .ctr-note_previews {
     top: 3.8em;
