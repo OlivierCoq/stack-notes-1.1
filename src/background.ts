@@ -3,14 +3,6 @@ const path = require('path')
 const isDev = require('electron-is-dev')
 const fs = require('fs') 
 
-
-// Store data
-
-// import { createPinia } from 'pinia'
-// import { useNotesStore, Note } from "./stores/notes";
-
-// const pinia = createPinia()
-
 let mainWindow: any
 
 function createWindow() {
