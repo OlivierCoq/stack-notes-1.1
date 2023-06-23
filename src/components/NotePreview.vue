@@ -1,19 +1,45 @@
 <template>
-  <div class="note-preview px-5 py-3 bg-grey-darken-4" @click="selectNote">
-    <h5 class="mb-0">{{ note.name }}</h5>
-    <p class="note-preview__content">{{ notePreview }}</p>
-    <p class="note-preview__date">{{ noteDate }}</p>
+  <div class="note-preview ps-5 py-3 bg-grey-darken-4 d-flex flex-row" @click="selectNote">
+    <div v-if="!state.action" class="main">
+      <h5 class="mb-0">{{ note.name }}</h5>
+      <p class="note-preview__content">{{ notePreview }}</p>
+      <p class="note-preview__date">{{ noteDate }}</p>
+    </div>
+    <transition v-else name="slide-fade">
+      <div class="actions w-100 me-4">
+        <div class="d-flex flex-row align-center justify-content-between" style="height: 3.5em;">
+          <v-spacer />
+          <folder-icon class="mx-3" />
+          <trash-icon class="mx-3" @click="deleteNote" />
+          <v-spacer />
+          <close-icon class="mb-5 pb-5" @click="state.action = false" />
+        </div>
+      </div>
+    </transition>
+    <div v-if="!state.action">
+      <vertical-elipsis @click="state.action = true"></vertical-elipsis>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { useNotesStore } from "@/stores/notes";
 import { NoteFile } from "../types/Files";
-import { PropType, computed } from "vue";
+import { PropType, computed, reactive } from "vue";
+import VerticalElipsis from "./Icons/VerticalElipsis.vue";
+import TrashIcon from "./Icons/Trash.vue";
+import closeIcon from "./Icons/Close.vue";
+import FolderIcon from "./Icons/FolderIcon.vue";
+
 export default {
+  emits: ['delete'],
   // statically type props later
-  setup(props: any) {
+  setup(props: any, {emit}: any) {
     const store = useNotesStore();
+    const state = reactive({
+      action: false,
+      deleting_note: false
+    });
     const noteDate = computed(() => {
       return new Date(props.note.date).toLocaleDateString();
     });
@@ -33,13 +59,27 @@ export default {
       store.activeNote = props.note;
     };
 
+    const deleteNote = () => {
+
+        // UX/UI
+      store.notes = store.notes.filter((n) => n.id !== props.note.id);
+      store.openNotes = store.openNotes.filter((n) => n.id !== props.note.id);
+      state.action = false;
+      state.deleting_note = false;
+
+        // API
+      emit('delete', props.note)
+    };
+
     return {
+      state,
       store,
         // computed
       noteDate,
       notePreview,
         // methods
-      selectNote
+      selectNote,
+      deleteNote,
     };
   },
   props: {
@@ -47,6 +87,12 @@ export default {
       type: Object as PropType<NoteFile>,
       required: true,
     },
+  },
+  components: {
+    VerticalElipsis,
+    TrashIcon,
+    closeIcon,
+    FolderIcon,
   },
 };
 </script>
@@ -67,5 +113,16 @@ export default {
     background-color: rgb(255, 255, 255, 0.07);
     cursor: pointer;
    }
+}
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>

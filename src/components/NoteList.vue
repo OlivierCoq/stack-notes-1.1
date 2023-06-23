@@ -22,6 +22,7 @@
           v-for="note in notes"
           :note="note"
           :key="note.path"
+          @delete="deleteNote"
         ></note-preview>
       </div>
       <v-divider></v-divider>
@@ -235,6 +236,28 @@ export default {
       state.adding_new_note = false;
     };
 
+    const deleteNote = (note) => {
+      console.log("deleting note", note);
+      const postObj = {
+        id: note.id
+      }
+      window.api
+        .invoke("delete-note", postObj)
+        .then((result) => {
+          if (result.success) {
+            console.log("File deleted successfully:", result.filePath);
+            // nextTick(() => {
+            //   store.activeNote = postObj;
+            // });
+          } else {
+            console.error("File save failed:", result.error);
+          }
+        })
+        .catch((error) => {
+          console.error("An error occurred:", error);
+        });
+    };
+
     // Lifecycle Hooks
     onBeforeMount(() => { 
       console.log("mounted, motherfucker");
@@ -263,7 +286,7 @@ export default {
       currentDate,
       allUsers,
       notes,
-
+      deleteNote
     };
   },
   components: {
