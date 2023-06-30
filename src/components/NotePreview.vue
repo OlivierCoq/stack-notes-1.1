@@ -1,23 +1,54 @@
 <template>
-  <div class="note-preview ps-5 py-3 bg-grey-darken-4 d-flex flex-row" @click="selectNote">
-    <div v-if="!state.action" class="main">
-      <h5 class="mb-0">{{ note.name }}</h5>
-      <p class="note-preview__content">{{ notePreview }}</p>
-      <p class="note-preview__date">{{ noteDate }}</p>
-    </div>
-    <transition v-else name="slide-fade">
-      <div class="actions w-100 me-4">
-        <div class="d-flex flex-row align-center justify-content-between" style="height: 3.5em;">
-          <v-spacer />
-          <folder-icon class="mx-3" />
-          <trash-icon class="mx-3" @click="deleteNote" />
-          <v-spacer />
-          <close-icon class="mb-5 pb-5" @click="state.action = false" />
-        </div>
+  <div class="note-preview bg-grey-darken-4 position-relative" @click="selectNote">
+    <div class="ctr-details w-100 h-100 position-absolute d-flex flex-row">
+      <div class="details p-3">
+        <h5 class="mb-0">{{ note.name }}</h5>
+        <p class="note-preview__content">{{ notePreview }}</p>
+        <p class="note-preview__date">{{ noteDate }}</p>
       </div>
-    </transition>
-    <div v-if="!state.action">
-      <vertical-elipsis @click="state.action = true"></vertical-elipsis>
+      <div class="elipsis">
+        <vertical-elipsis @click="state.action = true" />
+      </div>
+    </div>
+    <div class="ctr-actions h-100 position-absolute d-flex flex-row" :class="state.action ? 'active' : ''">
+      <div class="options w-90 d-flex flex-row align-center justify-center">
+        <folder-icon class="mx-3" />
+        <trash-icon class="mx-3" @click="deleteNote" />
+
+        <v-dialog v-model="state.deleting_note" width="400px" theme="dark">
+            <v-card>
+              <v-card-text>
+                <div class="d-flex align-center justify-center py-2">
+                  <trash-icon class="mx-3" />
+                </div>
+
+                <div class="d-flex align-center justify-space-between mb-4">
+                  <div>
+                    <h3 class="primary-font">Are you sure you want to delete {{ note.name }} ?</h3>
+                  </div>
+                </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn text @click="state.deleting_note = false" size="small"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  color="primary"
+                  variant="outlined"
+                  @click="confirmDelete"
+                  size="small"
+                  >Delete</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+
+      </div>
+      <div class="close">
+        <close-icon class="mb-5 pb-5" @click="state.action = false" />
+      </div>
     </div>
   </div>
 </template>
@@ -60,6 +91,10 @@ export default {
     };
 
     const deleteNote = () => {
+      state.deleting_note = true;
+    };
+
+    const confirmDelete = () => {
 
         // UX/UI
       store.notes = store.notes.filter((n) => n.id !== props.note.id);
@@ -80,6 +115,7 @@ export default {
         // methods
       selectNote,
       deleteNote,
+      confirmDelete
     };
   },
   props: {
@@ -99,6 +135,10 @@ export default {
 
 <style lang="scss" scoped>
 .note-preview {
+  width: 250px;
+  height: 100px;
+  z-index: 1;
+
   border-top: 1px solid rgb(255, 255, 255, 0.07);
   &__date {
     color: rgb(255, 255, 255, 0.5);
@@ -113,16 +153,32 @@ export default {
     background-color: rgb(255, 255, 255, 0.07);
     cursor: pointer;
    }
+   .ctr-details {
+    z-index: 2;
+
+    .details {
+      padding: 5px 15px;
+    }
+    .elipsis {
+      padding: 5px;
+    }
+   }
+   .ctr-actions {
+      background-color: #3e3e42;
+      width: 95%;
+      z-index: 3;
+      right: 0;
+      border-bottom-left-radius: 5px;
+      border-top-left-radius: 5px;
+      margin-right: -15em;
+      transition: all .3s ease;
+      box-shadow:rgb(255, 255, 255, 0.07);
+   }
+   .active {
+     margin-right: 0;
+   }
 }
-.slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
+.w-90 {
+  width: 90%;
 }
 </style>

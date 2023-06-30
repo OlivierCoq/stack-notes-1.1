@@ -123,7 +123,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useNotesStore } from "../stores/notes";
 import {
   reactive,
@@ -236,27 +236,27 @@ export default {
       state.adding_new_note = false;
     };
 
-    const deleteNote = (note) => {
-      console.log("deleting note", note);
-      const postObj = {
-        id: note.id
-      }
-      window.api
-        .invoke("delete-note", postObj)
-        .then((result) => {
-          if (result.success) {
-            console.log("File deleted successfully:", result.filePath);
-            // nextTick(() => {
-            //   store.activeNote = postObj;
-            // });
-          } else {
-            console.error("File save failed:", result.error);
-          }
-        })
-        .catch((error) => {
-          console.error("An error occurred:", error);
-        });
-    };
+    const deleteNote = (note: { id: number; name: string }): void => {
+  console.log("deleting note", note);
+  const postObj = {
+    id: note.id,
+    name: note.name
+  };
+
+  window.api.send("delete-note", postObj);
+
+  // Handle the response from the backend
+  window.api.receive("delete-note-reply", (result: { success: boolean; error?: string }) => {
+    if (result.success) {
+      console.log("File deleted successfully:", postObj.name);
+      // Update the state or perform any necessary actions
+    } else {
+      console.error("File deletion failed:", result.error);
+    }
+  });
+};
+
+
 
     // Lifecycle Hooks
     onBeforeMount(() => { 
@@ -307,6 +307,7 @@ export default {
     top: 3.8em;
     height: 37em;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
   .ctr-new_note_btn {
     bottom: 0px;

@@ -65,15 +65,20 @@ function createWindow() {
     }
   });
 
-  // Deleting existing note
-  ipcMain.handle("delete-note", async (event, filePath) => {
-    try {
-      fs.unlinkSync(filePath);
-      event.sender.send("delete-note-reply", { success: true });
-    } catch (error) {
-      event.sender.send("delete-note-reply", { success: false, error: (error as Error).message });
-    }
-  });
+// Deleting existing note
+ipcMain.on("delete-note", (event, note) => {
+  const filePath = path.join(__dirname, '..', `local_files/${note.name}.json`);
+
+  try {
+    fs.unlinkSync(filePath);
+    event.reply("delete-note-reply", { success: true });
+  } catch (error) {
+    event.reply("delete-note-reply", { success: false, error: (error as Error).message });
+  }
+});
+
+
+
 
   // Get all notes
   ipcMain.handle("get-notes", async (event) => {
