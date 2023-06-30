@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "typeRoots": [
+      "./public/src/shims-vue.d.ts",
+      "./node_modules/@types"
+    ],
     "target": "es5",
     "module": "esnext",
     "strict": true,
