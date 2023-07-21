@@ -195,7 +195,7 @@ export default {
       try {
         const response = await window.api.invoke("get-notes");
         if (response && response.success) {
-          console.log("Received notes:", response.notes);
+          // console.log("Received notes:", response.notes);
           store.notes = response.notes;
         }
       } catch (error) {
@@ -283,6 +283,7 @@ export default {
       // Data
       state,
       // Methods
+      getNotes,
       addNewNote,
       currentDate,
       allUsers,

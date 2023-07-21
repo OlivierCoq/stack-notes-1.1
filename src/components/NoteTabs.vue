@@ -1,7 +1,7 @@
 <template>
     <div class="tabs-container w-100 overflow-x-auto">
         <v-tabs v-model="store.activeNote" fixed-tabs density="comfortable" grow center-active>
-            <v-tab v-for="(note, a) in store.openNotes" :key="a" :value="note" class="d-flex">
+            <v-tab v-for="(note, a) in store.openNotes" :key="a" :value="note" @click="setNote(note)" class="d-flex">
                 {{ note.name }} 
                 <!-- <v-spacer/> -->
                 <div class="spacer"></div>
@@ -10,7 +10,7 @@
                 </span> 
             </v-tab>
         </v-tabs>
-        <v-divider></v-divider>
+        <v-divider />
     </div>
 </template>
 
@@ -22,14 +22,19 @@ import Close from "./Icons/Close.vue";
 export default  {
     setup () {
         const store = useNotesStore();
+        const setNote = (note) => {
+            if(store.openNotes.length) { store.activeNote = note }
+            else { store.activeNote = false }
+        }
         const removeTab = (note) => {
             store.openNotes = store.openNotes.filter(n => n.id !== note.id)
-            if (store.openNotes.length == 1) { store.activeNote = {} }
+            // store.activeNote = {}
         }
         return {
             store,
             // methods
-            removeTab
+            removeTab,
+            setNote
         }
     },
     components: {
