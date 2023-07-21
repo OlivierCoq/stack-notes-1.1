@@ -7,7 +7,14 @@
 <script>
 import NoteTabs from "./NoteTabs.vue";
 import AppEditor from "./AppEditor.vue";
+import { useNotesStore } from "@/stores/notes";
 export default {
+  setup(){
+    const store = useNotesStore();
+    return {
+      store
+    }
+  },
   components: {
     NoteTabs,
     AppEditor,

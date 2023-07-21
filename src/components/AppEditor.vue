@@ -1,32 +1,33 @@
 <template>
-  <editor-content :editor="editor"  />
+  <div contenteditable v-html="content">
+    
+  </div>
 </template>
 
 <script>
+import { computed, ref, watch, reactive, onBeforeMount } from "vue";
 import { useNotesStore } from "@/stores/notes";
-import { Editor, EditorContent } from "@tiptap/vue-3";
-import StarterKit from "@tiptap/starter-kit";
+
 export default {
   setup(props) {
     const store = useNotesStore();
-    const editor = new Editor({
-      extensions: [StarterKit],
-      content: store.activeNote.contents ? store.activeNote.contents[0].content : '',
-    })
+    const content = ref("");
 
+    watch(() => store?.activeNote?.id, () => {
+      content.value = store.activeNote?.contents?.[0]?.content || ""
+    }, { deep: true})
+
+    onBeforeMount(() => {
+      content.value = store.activeNote?.contents?.[0]?.content || ""
+    })
     return {
-      store,
-      editor,
+      content,
     };
-  },
-  components: {
-    EditorContent,
-  },
+  }
 };
 </script>
 
 <style lang="scss">
-
 .ProseMirror {
   border: none;
   outline: none;
