@@ -28,11 +28,7 @@ export default {
 </script>
 
 <style lang="scss">
-.ProseMirror {
-  border: none;
-  outline: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+[contenteditable]:focus {
+    outline: 0px solid transparent;
 }
 </style>
