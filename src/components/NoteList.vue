@@ -302,8 +302,7 @@ export default {
 <style lang="scss" scoped>
 // This is the only height that works for the note list
 .note-list {
-  height: 44.2em;
-  overflow: hidden;
+ height: calc(100vh - 65px);
 
   .ctr-note_previews {
     top: 3.8em;
