@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export interface NoteFileContents {
-  content: JSON;
+  content: string;
 }
 
 // Notes type. Taken from src/types/Files.d.ts
@@ -30,6 +30,10 @@ export const useNotesStore = defineStore('notes', {
       if(this.openNotes.find(item => note.id === item.id)) return
       this.openNotes.push(note)
     },
+    updateContent(content: string, contentIndex: number) : void {
+      console.log(content)
+      this.activeNote.contents[contentIndex].content = content
+    }
   }
 })
 

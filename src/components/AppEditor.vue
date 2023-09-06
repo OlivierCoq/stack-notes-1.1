@@ -1,34 +1,34 @@
 <template>
-  <div contenteditable v-html="content">
-    
-  </div>
+    <div v-for="item,idx in store.activeNote.contents" :key="idx" class="pa-5">
+      <div v-once contenteditable ref="contentEditable" @input="updateContent($event, idx)" :innerHTML="item.content"></div>
+    </div>
 </template>
 
-<script>
-import { computed, ref, watch, reactive, onBeforeMount } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useNotesStore } from "@/stores/notes";
 
-export default {
-  setup(props) {
-    const store = useNotesStore();
-    const content = ref("");
+const contentEditable = ref<HTMLInputElement>()
 
-    watch(() => store?.activeNote?.id, () => {
-      content.value = store.activeNote?.contents?.[0]?.content || ""
-    }, { deep: true})
+const store = useNotesStore();
 
-    onBeforeMount(() => {
-      content.value = store.activeNote?.contents?.[0]?.content || ""
-    })
-    return {
-      content,
-    };
-  }
-};
+
+const updateContent = (value: Event, idx: number) => {
+  // hacky as fuck lol
+  const content = (value?.target as HTMLElement)?.innerHTML
+  store.updateContent(content, idx);
+}
+
+
+
+
+
+
+
 </script>
 
 <style lang="scss">
 [contenteditable]:focus {
-    outline: 0px solid transparent;
+  outline: 0px solid transparent;
 }
 </style>
