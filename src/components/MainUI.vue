@@ -1,7 +1,7 @@
 <template>
   <div class="bg-grey-darken-4 main-ui">
     <note-tabs class="main-ui__tabs" />
-    <app-editor class="main-ui__editor pa-5" />
+    <app-editor v-if="store.activeNote.id" class="main-ui__editor" />
   </div>
 </template>
 <script>
@@ -27,7 +27,7 @@ export default {
   display: flex;
   flex-direction: column;
   &__editor {
-    max-height: 80vh;
+    // max-height: 80vh;
     flex: 1;
     overflow-y: auto;
   }

@@ -1,11 +1,15 @@
 <template>
-  <div v-for="(item, idx) in content" :key="item.id" class="pa-5">
-    <div
-      contenteditable
-      ref="contentEditable"
-      :innerHTML="item.content"
-      @input="queueSave($event, idx)"
-    ></div>
+  <div id="ctr-app_editor" class="w-100 position-relative">
+    <div v-for="(item, idx) in store.activeNote.contents" :key="idx" class="pa-5">
+      <div
+        class="d-flex flex-column align-start justify-start w-100"
+        contenteditable
+        ref="contentEditable"
+        :innerHTML="item.content"
+        @input="queueSave($event, idx)"
+      ></div>
+    </div>
+    <action-bar />
   </div>
 </template>
 
@@ -14,6 +18,7 @@ import { ref, onMounted, watch } from "vue";
 import { useNotesStore } from "@/stores/notes";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
+import ActionBar from "./ActionBar.vue";
 
 const content = ref<Array<{ content: string; id: string }>>([]);
 const contentEditable = ref<HTMLInputElement>();
@@ -36,7 +41,12 @@ const queueSave = _.debounce((event: Event, idx: number) => {
 </script>
 
 <style lang="scss">
-[contenteditable]:focus {
-  outline: 0px solid transparent;
-}
+  #ctr-app_editor {
+    flex: none !important;
+    height: 90vh !important;
+
+    [contenteditable]:focus {
+      outline: 0px solid transparent;
+    }
+  }
 </style>
