@@ -29,13 +29,9 @@
 <script>
   import { useNotesStore } from "../stores/notes"
   import { reactive } from "vue"
-  import IDE from "./IDE.vue"
 
   export default {
     name: "ActionBar",
-    components: {
-      IDE
-    },
     setup() {
       const store = useNotesStore();
         // data
@@ -44,9 +40,8 @@
         // methods
       const add_content = () => {
         store.activeNote.contents.push({
-          content: `
-            
-          `,
+          editor_content: ``,
+          content: ``,
           code: true
         })
       }
@@ -64,5 +59,6 @@
     height: 65px;
     bottom: 0px;
     right: 0;
+    z-index: 4;
   }
 </style>

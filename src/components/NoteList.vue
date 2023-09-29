@@ -314,6 +314,7 @@ export default {
   }
   .ctr-new_note_btn {
     bottom: 0px;
+    z-index: 1001;
   }
 }
 </style>

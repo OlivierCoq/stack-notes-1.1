@@ -1,7 +1,7 @@
 <template>
   <div id="ctr-app_editor" class="w-100 position-relative">
     <div v-for="(item, idx) in store.activeNote.contents" :key="idx" class="pa-5">
-      <ide v-if="item.code" :content="item.content" />
+      <code-editor v-if="item.code" :content="item.content" :editor_content="item.editor_content" />
       <div
         v-else
         class="d-flex flex-column align-start justify-start w-100"
@@ -20,7 +20,7 @@ import { ref, onMounted, watch } from "vue";
 import { useNotesStore } from "@/stores/notes";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
-import IDE from "./IDE.vue";
+import CodeEditor from "./CodeEditor.vue";
 import ActionBar from "./ActionBar.vue";
 
 const content = ref<Array<{ content: string; id: string }>>([]);

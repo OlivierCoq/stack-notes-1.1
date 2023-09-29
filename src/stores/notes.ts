@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 export interface NoteFileContents {
+  editor_content: string;
   content: string;
   code: boolean;
 }
