@@ -31,7 +31,7 @@
     "uuid": "^9.0.0",
     "vue": "^3.2.13",
     "vue-uuid": "^3.0.0",
-    "vue3-ace-editor": "^2.2.2",
+    "vue3-ace-editor": "^2.2.3",
     "vuetify": "^3.2.1"
   },
   "devDependencies": {

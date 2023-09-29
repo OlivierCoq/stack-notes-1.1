@@ -154,6 +154,7 @@ export default {
         contents: [
           {
             content: "<p>You've created a new note with Stack Notes 🎉 Start writing code here 👨‍💻👩‍💻</p>",
+            code: false
           },
         ],
         users: [
@@ -214,6 +215,7 @@ export default {
         contents: [
           {
             content: "<p>You've created a new note with Stack Notes 🎉 Start writing code here 👨‍💻👩‍💻</p>",
+            code: false
           },
         ],
       };

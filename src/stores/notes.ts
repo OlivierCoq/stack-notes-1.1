@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 export interface NoteFileContents {
   content: string;
+  code: boolean;
 }
 
 // Notes type. Taken from src/types/Files.d.ts

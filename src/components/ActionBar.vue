@@ -7,7 +7,7 @@
             <v-btn
               color="secondary"
               variant="outlined"
-              class="mx-3"
+              class="mx-1"
               flat
               @click="add_content"
               >
@@ -16,7 +16,7 @@
             <v-btn
               color="info"
               variant="outlined"
-              class="mx-3"
+              class="mx-1"
               flat>
                 Save
             </v-btn>
@@ -29,21 +29,25 @@
 <script>
   import { useNotesStore } from "../stores/notes"
   import { reactive } from "vue"
+  import IDE from "./IDE.vue"
+
   export default {
     name: "ActionBar",
+    components: {
+      IDE
+    },
     setup() {
       const store = useNotesStore();
         // data
-      const state = reactive({
-
-      })
+      const state = reactive({})
 
         // methods
       const add_content = () => {
         store.activeNote.contents.push({
           content: `
             
-          `
+          `,
+          code: true
         })
       }
 
