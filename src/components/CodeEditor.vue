@@ -6,6 +6,12 @@
       lang="html"
       theme="chrome"
       style="height: 300px" />
+      <div
+        class="d-flex flex-column align-start justify-start w-10 note_body"
+        contenteditable
+        ref="contentEditable"
+        :innerHTML="state.content"
+      ></div>
   </div>
 </template>
 <script>
@@ -52,6 +58,7 @@
     setup(props) {
         // data
       const state = reactive({
+        content: props.content,
         editor_content: props.editor_content
       })
       // const editor_content = computed(() => props.editor_content)
@@ -63,9 +70,22 @@
       return {
         state,
         store,
+        // editor_content,
         // methods
         editorInit
       }
     }
   }
 </script>
+<style lang="scss">
+  .note_body {
+    background: #424242;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 100%;
+    min-height: 200px;
+    overflow-y: auto;
+  }
+</style>

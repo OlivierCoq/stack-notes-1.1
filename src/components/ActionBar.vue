@@ -59,6 +59,6 @@
     height: 65px;
     bottom: 0px;
     right: 0;
-    z-index: 4;
+    z-index: 9; // above the editor. A strange and very specific number.
   }
 </style>
